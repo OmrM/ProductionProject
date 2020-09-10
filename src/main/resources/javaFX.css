@@ -6,7 +6,7 @@
 .header-section {
     -fx-padding: 10px;
     -fx-font-size: 20px;
-    -fx-background-color: teal;
+    -fx-background-color: #008080;
 }
 
 
@@ -16,20 +16,98 @@
 
 
 .tab-pane{
-    -fx-background-color: linear-gradient(rgba(117,117,117,1) 0%, rgba(130,130,130,1) 24%, rgba(108,122,126,1) 100%);
+    -fx-background-color:  #3c3c3c;
+
+}
+/*linear-gradient(rgba(117,117,117,1) 0%, rgba(130,130,130,1) 24%, rgba(108,122,126,1) 100%) */
+
+
+
+.tab-pane .tab-header-area .tab-header-background{
+    -fx-opacity: 0;
+    -fx-background-color:  #3c3c3c;
+}
+.tab{
+    -fx-background-color:  #3c3c3c;
 
 }
 
+.tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+
+.tab-pane .tab:selected{
+    -fx-background-color: #989898;
+
+
+}
+
+/*I need to figure out how to apply this */
+.grid-pane{
+    -fx-background-color: white;
+    -fx-background-radius: 5.0;
+    -fx-background-insets: 0.0 5.0 0.0 5.0;
+    -fx-padding: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-border-color: black;
+}
+
+
+
+
+.table-view{
+    -fx-background-color: transparent;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+
+.table-view .column-header-background{
+    -fx-background-color: #131313;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+
+.list-view{
+    -fx-background-color: lightgray;
+}
+
+
+.text-area{
+    -fx-background-color: lightgray;
+}
+
+
 
 .button{
-    -fx-background-color: #86B3D1;
+    -fx-background-color: #003b81;
     -fx-border: none;
     -fx-color: white;
     -fx-padding: 10px 25px;
     -fx-border-width: 2px;
     -fx-border-color: Gray ;
     -fx-font-size: 12px;
-    -fx-border-radius: 5px
+    -fx-border-radius: 2px;
+    -fx-text-fill: white;
 }
 .button:hover{
     -fx-background-color: #7C8E93;
@@ -40,27 +118,22 @@
     -fx-border-radius: 5px
 }
 
-.tab-pane .tab-header-area .tab-header-background{
-    -fx-opacity: 0;
-    background: linear-gradient(rgba(117,117,117,1) 0%, rgba(130,130,130,1) 10%, rgba(93,117,124,1) 52%);
+.label{
+    -fx-color: #a1ccd0;
+    -fx-text-fill: white;
 }
 
-.tab-pane .tab{
-    -fx-background-color: #7C8E93;
+
+.text-field{
+    -fx-background-color: lightgray;
 }
 
-.tab-pane .tab:selected{
-    -fx-background-color: #86B3D1;
+.combo-box{
+    -fx-background-color: lightgray;
+
 }
 
-.grid{
-    -fx-background-color: white;
-    -fx-background-radius: 5.0;
-    -fx-background-insets: 0.0 5.0 0.0 5.0;
-    -fx-padding: 10;
-    -fx-hgap: 10;
-    -fx-vgap: 10;
-}
+
 
 
 
