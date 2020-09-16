@@ -3,12 +3,6 @@
     -fx-font-family: sans-serif;
     -fx-background-color: #ffffff;
 }
-.header-section {
-    -fx-padding: 10px;
-    -fx-font-size: 20px;
-    -fx-background-color: #008080;
-}
-
 
 
 
@@ -99,7 +93,7 @@
 
 
 .button{
-    -fx-background-color: #003b81;
+    -fx-background-color:  #989898;
     -fx-border: none;
     -fx-color: white;
     -fx-padding: 10px 25px;
@@ -141,7 +135,13 @@
 
 
 
+/*
 
+.header-section {
+    -fx-padding: 10px;
+    -fx-font-size: 20px;
+    -fx-background-color: #008080;
+}
 
 
 
