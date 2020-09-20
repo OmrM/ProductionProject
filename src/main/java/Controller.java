@@ -121,7 +121,7 @@ public class Controller {
             System.out.println(rs.getString(2));
             System.out.println(rs.getString(3));
 
-
+            tableColumn1.setText(rs.getString(1));
 
 
 
