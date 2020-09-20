@@ -1,6 +1,7 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -24,6 +25,11 @@ public class Controller {
     private ChoiceBox choiceBox1;
     @FXML
     private ChoiceBox choiceBox2;
+    @FXML
+    private TableColumn<?, ?> tableColumn1;
+
+    @FXML
+    private TableColumn<?, ?> tableColumn2;
 
     public void recordProduction(ActionEvent event) {
         System.out.println("Record Production");
@@ -56,7 +62,7 @@ public class Controller {
 
 
     public void connectToDbUpdate() { //I want this function to be called when you press the add product button.
-        //it should take what's in the textfields and put it into the table
+        //it should take what's in the text fields and put it into the table
         // it should also call the function to output that info into the tableview
 
         final String JDBC_DRIVER = "org.h2.Driver";
@@ -78,28 +84,22 @@ public class Controller {
             conn = DriverManager.getConnection(DB_URL);
             //STEP 3: Execute a query
 
-            //for now i'm just hardcoding the values, but I need to read the text field values into these variables.
             //String productName = fxIdname.getText(); user this to pull info from text fields
-            // String productName =  "egg";
-            // int productId = 1;
-            // String productType = "Food";
-            // String productManufacturer = "walmart";
-
             String productName = nameOne.getText();
-            String productType = "type1";
+            String productType = choiceBox1.getValue().toString(); /////picks product type
             String productManufacturer = manufacturerOne.getText();
 
             String productName2 = nameTwo.getText();
-            String productType2 = "type2";
+            String productType2 = choiceBox2.getValue().toString();
             String productManufacturer2 = manufacturerTwo.getText();
 
             stmt = conn.createStatement();
 
 
-            //i'm so sorry for committing these sins. I'l rewrite this later. i'm just excited that I can get this to communicate with the database.
+            //i'm so sorry for committing these sins. I'l rewrite this later.
 
             //String sqlIn = "INSERT INTO PRODUCT(ID, NAME, TYPE, MANUFACTURER) VALUES($productId, '$productName', '$productType', '$productManufacturer')";
-            //String sqlIn = "INSERT INTO PRODUCT(ID, NAME, TYPE, MANUFACTURER) VALUES(1, 'EGG', 'FOOD', 'WALMART')";
+
 
 
             String sqlIn = "UPDATE PRODUCT SET NAME = '" + productName + "', TYPE = '" + productType + "', MANUFACTURER = '" + productManufacturer + "' WHERE ID = 1";
@@ -110,17 +110,22 @@ public class Controller {
             stmt.executeUpdate(sqlIn2);
 
 
-            String sqlOut = "SELECT * FROM PRODUCT WHERE ID = 2";
+            String sqlOut = "SELECT * FROM PRODUCT WHERE ID = 2"; //this makes the code down there only grab stuff from row index 2??
 
 
 
-            ResultSet rs = stmt.executeQuery(sqlOut); //executeQuery grabs info from db
+            ResultSet rs = stmt.executeQuery(sqlOut); //executeQuery grabs info from the db
             rs.next();
             System.out.println(sqlOut);
             System.out.println(rs.getString(1));
             System.out.println(rs.getString(2));
             System.out.println(rs.getString(3));
-            System.out.println(rs.getString(4));
+
+
+
+
+
+
 
 
             // STEP 4: Clean-up environment

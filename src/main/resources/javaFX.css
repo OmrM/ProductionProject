@@ -131,8 +131,12 @@
     -fx-background-color: #f6f6f6;
 }
 
-
-
+.choice-box .context-menu{
+    -fx-text-fill: black;
+}
+.choice-box .menu-item >  .label{
+    -fx-text-fill: black;
+}
 
 
 
