@@ -20,7 +20,7 @@ public class Main extends Application {
 
         scene.getStylesheets().addAll(this.getClass().getResource("javaFX.css").toExternalForm());
 
-        primaryStage.setTitle("FXML Welcome");
+        primaryStage.setTitle("Production");
         primaryStage.setScene(scene);
         primaryStage.show();
 

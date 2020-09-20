@@ -124,7 +124,11 @@
 
 .combo-box{
     -fx-background-color: lightgray;
+    -fx-text-fill: black;
 
+}
+.combo-box:hover{
+    -fx-background-color: #f6f6f6;
 }
 
 
