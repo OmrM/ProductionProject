@@ -87,8 +87,6 @@ public class Controller {
 
 
 
-
-            //String sqlIn = "UPDATE PRODUCT SET NAME = '" + productName + "', TYPE = '" + productType + "', MANUFACTURER = '" + productManufacturer + "' WHERE ID = 2";
            // String sqlIn = "INSERT INTO PRODUCT(ID, NAME, MANUFACTURER, TYPE) VALUES((SELECT MAX(ID) FROM PRODUCT) +1 " + ", '" + productName + "', '" + productManufacturer + "', '" + productType + "')";
             //I wasted a lot of time trying to insert the next id; i didn't realize that the sql db already had auto_increment.
             //String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES("+ "'" + productName + "', '" + productManufacturer + "', '" + productType + "')"; //apparently this isn't good.
