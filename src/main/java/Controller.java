@@ -11,20 +11,17 @@ public class Controller {
     private Label lblOutput;
     @FXML
     private TextArea taOutput;
+
     @FXML
-    private TextField nameOne;
+    private TextField name;
+
     @FXML
-    private TextField nameTwo;
-    @FXML
-    private TextField manufacturerOne;
-    @FXML
-    private TextField manufacturerTwo;
+    private TextField manufacturer;
     @FXML
     private ComboBox<String> quantityBox;
+
     @FXML
-    private ChoiceBox choiceBox1;
-    @FXML
-    private ChoiceBox choiceBox2;
+    private ChoiceBox productTypeBox;
     @FXML
     private TableColumn<?, ?> tableColumn1;
 
@@ -45,15 +42,16 @@ public class Controller {
 
     public void initialize() {
         //I should probably update the table view inside of this, so it will refresh
+        quantityBox.setEditable(true);
         quantityBox.getSelectionModel().selectFirst(); //this is to select the first thing on the list.
         for(int count = 1; count <= 10; count ++){
             quantityBox.getItems().add(String.valueOf(count));
-           choiceBox1.getItems().add("Type " + count);
-           choiceBox2.getItems().add("Type " + count);
+
+            productTypeBox.getItems().add("Type " + count);
 
         }
-        choiceBox1.getSelectionModel().selectFirst();
-        choiceBox2.getSelectionModel().selectFirst();
+
+        productTypeBox.getSelectionModel().selectFirst();
 
 
 
@@ -82,37 +80,30 @@ public class Controller {
             //STEP 2: Open a connection
             //conn = DriverManager.getConnection(DB_URL, USER, PASS);
             conn = DriverManager.getConnection(DB_URL);
+            stmt = conn.createStatement();
             //STEP 3: Execute a query
 
-            //String productName = fxIdname.getText(); user this to pull info from text fields
-            String productName = nameOne.getText();
-            String productType = choiceBox1.getValue().toString(); /////picks product type
-            String productManufacturer = manufacturerOne.getText();
-
-            String productName2 = nameTwo.getText();
-            String productType2 = choiceBox2.getValue().toString();
-            String productManufacturer2 = manufacturerTwo.getText();
-
-            stmt = conn.createStatement();
-
-
-            //i'm so sorry for committing these sins. I'l rewrite this later.
-
-            //String sqlIn = "INSERT INTO PRODUCT(ID, NAME, TYPE, MANUFACTURER) VALUES($productId, '$productName', '$productType', '$productManufacturer')";
+            //String varName = fxIdName.getText(); use this syntax to pull info from text fields
+            String productName = name.getText();
+            String productType = productTypeBox.getValue().toString();
+            String productManufacturer = manufacturer.getText();
 
 
 
-            String sqlIn = "UPDATE PRODUCT SET NAME = '" + productName + "', TYPE = '" + productType + "', MANUFACTURER = '" + productManufacturer + "' WHERE ID = 1";
-            String sqlIn2 = "UPDATE PRODUCT SET NAME = '" + productName2 + "', TYPE = '" + productType2 + "', MANUFACTURER = '" + productManufacturer2 + "' WHERE ID = 2";
 
+
+
+            //String sqlIn = "UPDATE PRODUCT SET NAME = '" + productName + "', TYPE = '" + productType + "', MANUFACTURER = '" + productManufacturer + "' WHERE ID = 2";
+           // String sqlIn = "INSERT INTO PRODUCT(ID, NAME, MANUFACTURER, TYPE) VALUES((SELECT MAX(ID) FROM PRODUCT) +1 " + ", '" + productName + "', '" + productManufacturer + "', '" + productType + "')";
+            //I wasted a lot of time trying to insert the next id; i didn't realize that the sql db already had auto_increment.
+
+            String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES("+ "'" + productName + "', '" + productManufacturer + "', '" + productType + "')";
             System.out.println(sqlIn); //just putting this here to monitor the syntax of the sql statement
             stmt.executeUpdate(sqlIn); //
-            stmt.executeUpdate(sqlIn2);
 
 
-            String sqlOut = "SELECT * FROM PRODUCT WHERE ID = 2"; //this makes the code down there only grab stuff from row index 2??
 
-
+            String sqlOut = "SELECT ID, NAME, MANUFACTURER, TYPE FROM PRODUCT";
 
             ResultSet rs = stmt.executeQuery(sqlOut); //executeQuery grabs info from the db
             rs.next();
@@ -121,7 +112,8 @@ public class Controller {
             System.out.println(rs.getString(2));
             System.out.println(rs.getString(3));
 
-            //tableColumn1.setText(rs.getString(1));
+            //tableColumn1.setText(rs.getString(1)); //how????
+
 
 
 
