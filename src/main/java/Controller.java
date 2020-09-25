@@ -21,12 +21,8 @@ public class Controller {
     private ComboBox<String> quantityBox;
 
     @FXML
-    private ChoiceBox productTypeBox;
-    @FXML
-    private TableColumn<?, ?> tableColumn1;
+    private ChoiceBox<String> productTypeBox;
 
-    @FXML
-    private TableColumn<?, ?> tableColumn2;
 
     public void recordProduction(ActionEvent event) {
         System.out.println("Record Production");
@@ -85,9 +81,8 @@ public class Controller {
 
             //String varName = fxIdName.getText(); use this syntax to pull info from text fields
             String productName = name.getText();
-            String productType = productTypeBox.getValue().toString();
             String productManufacturer = manufacturer.getText();
-
+            String productType = productTypeBox.getValue();
 
 
 
@@ -96,14 +91,19 @@ public class Controller {
             //String sqlIn = "UPDATE PRODUCT SET NAME = '" + productName + "', TYPE = '" + productType + "', MANUFACTURER = '" + productManufacturer + "' WHERE ID = 2";
            // String sqlIn = "INSERT INTO PRODUCT(ID, NAME, MANUFACTURER, TYPE) VALUES((SELECT MAX(ID) FROM PRODUCT) +1 " + ", '" + productName + "', '" + productManufacturer + "', '" + productType + "')";
             //I wasted a lot of time trying to insert the next id; i didn't realize that the sql db already had auto_increment.
-
-            String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES("+ "'" + productName + "', '" + productManufacturer + "', '" + productType + "')";
+            //String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES("+ "'" + productName + "', '" + productManufacturer + "', '" + productType + "')"; //apparently this isn't good.
+            final String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES(?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(sqlIn); //creating object named ps from class PreparedStatement, i guess.
+            ps.setString(1, productName);
+            ps.setString(2, productManufacturer);
+            ps.setString(3,productType);
             System.out.println(sqlIn); //just putting this here to monitor the syntax of the sql statement
-            stmt.executeUpdate(sqlIn); //
+            ps.executeUpdate();
+           // stmt.executeUpdate(sqlIn); //
 
 
-
-            String sqlOut = "SELECT ID, NAME, MANUFACTURER, TYPE FROM PRODUCT";
+            //to print out the newest record into the console:
+            String sqlOut = "SELECT ID, NAME, MANUFACTURER, TYPE FROM PRODUCT WHERE ID= (SELECT MAX(ID) FROM PRODUCT)";
 
             ResultSet rs = stmt.executeQuery(sqlOut); //executeQuery grabs info from the db
             rs.next();
@@ -121,6 +121,10 @@ public class Controller {
 
 
             // STEP 4: Clean-up environment
+            //i had to add this to avoid some spotbugs warning:
+            ps.close();
+            rs.close();
+
             stmt.close();
             conn.close();
         } catch (SQLException e) {
