@@ -40,11 +40,14 @@ public class Controller {
         //I should probably update the table view inside of this, so it will refresh
         quantityBox.setEditable(true);
         quantityBox.getSelectionModel().selectFirst(); //this is to select the first thing on the list.
-        for(int count = 1; count <= 10; count ++){
+/*        for(int count = 1; count <= 10; count ++){
             quantityBox.getItems().add(String.valueOf(count));
 
             productTypeBox.getItems().add("Type " + count);
 
+        }*/
+        for(ItemType id: ItemType.values()){
+            productTypeBox.getItems().add(id.getItemType());
         }
 
         productTypeBox.getSelectionModel().selectFirst();

@@ -21,7 +21,7 @@
     <children>
       <TabPane prefHeight="684.0" prefWidth="597.0">
          <tabs>
-            <Tab fx:id="productLineTab" text="Product Line">
+            <Tab fx:id="productLineTab" closable="false" text="Product Line">
                <content>
                   <AnchorPane focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="488.0" prefWidth="597.0" stylesheets="@javaFX.css">
                      <children>
@@ -53,13 +53,12 @@
                               <TableColumn prefWidth="172.0" text="Item Type" />
                           </columns>
                         </TableView>
-                        <Label layoutX="253.0" layoutY="388.0" stylesheets="@javaFX.css" text="Existing Products" />
                         <Label layoutX="28.0" layoutY="231.0" prefHeight="17.0" prefWidth="135.0" text=" Existing Products" />
                      </children>
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab fx:id="produceTab" text="Produce">
+            <Tab fx:id="produceTab" closable="false" text="Produce">
                <content>
                   <AnchorPane focusTraversable="true" prefHeight="179.0" prefWidth="541.0">
                      <children>
@@ -72,7 +71,7 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab fx:id="productionLogTab" text="Production Log">
+            <Tab fx:id="productionLogTab" closable="false" text="Production Log">
                <content>
                   <AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="603.0">
                      <children>
