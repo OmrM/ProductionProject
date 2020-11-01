@@ -122,7 +122,7 @@ public class Controller {
 
 
             // STEP 4: Clean-up environment
-            //i had to add this to avoid some spotbugs warning:
+
             ps.close();
             rs.close();
 

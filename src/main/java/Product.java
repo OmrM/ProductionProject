@@ -38,5 +38,7 @@ public abstract class Product implements Item {
     public void setName(String name) {
         Name = name;
     }
+
+
 }
 
