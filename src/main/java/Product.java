@@ -2,6 +2,9 @@
 public abstract class Product implements Item {
 
     private int Id;
+
+
+
     private ItemType Type;
     private String Manufacturer;
     private String Name;
@@ -13,6 +16,14 @@ public abstract class Product implements Item {
         this.Manufacturer = manufacturer;
         this.Type = type;
     }
+
+    public Product(int id, String name, String manufacturer, ItemType type) {
+        this.Id = id;
+        this.Manufacturer = manufacturer;
+        this.Name = name;
+        this.Type = type;
+    }
+
     //toString method for product
     public String toString() {
         return "Name: " + Name + "\n" + "Manufacturer: " + Manufacturer + "\n" + "Type: "
@@ -37,6 +48,14 @@ public abstract class Product implements Item {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public ItemType getType() {
+        return Type;
+    }
+
+    public void setType(ItemType type) {
+        Type = type;
     }
 
 

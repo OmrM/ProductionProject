@@ -22,6 +22,20 @@ public class Controller {
 
     @FXML
     private ChoiceBox<String> productTypeBox;
+    @FXML
+    private TableView<?> tableProducts;
+
+    @FXML
+    private TableColumn<?, ?> columnID;
+
+    @FXML
+    private TableColumn<?, ?> columnName;
+
+    @FXML
+    private TableColumn<?, ?> columnManufacturer;
+
+    @FXML
+    private TableColumn<?, ?> columnType;
 
 
     public void recordProduction(ActionEvent event) {
@@ -53,9 +67,31 @@ public class Controller {
         productTypeBox.getSelectionModel().selectFirst();
 
 
+        setupProductLineTable();
+
+    }
+
+
+
+
+
+
+
+    private void setupProductLineTable(){
+
+        tableProducts.setItems(productLine);
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnManufacturer.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
+        columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
 
 
     }
+
+
+
+
+
 
 
     public void connectToDbUpdate() { //I want this function to be called when you press the add product button.
@@ -114,11 +150,6 @@ public class Controller {
             System.out.println(rs.getString(3));
 
             //tableColumn1.setText(rs.getString(1)); //how????
-
-
-
-
-
 
 
             // STEP 4: Clean-up environment
