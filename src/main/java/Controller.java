@@ -1,10 +1,20 @@
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
 
-import javax.xml.transform.Result;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class Controller {
     @FXML
@@ -23,13 +33,13 @@ public class Controller {
     @FXML
     private ChoiceBox<String> productTypeBox;
     @FXML
-    private TableView<?> tableProducts;
+    private TableView<Product> tableProducts;
 
     @FXML
     private TableColumn<?, ?> columnID;
 
     @FXML
-    private TableColumn<?, ?> columnName;
+    private TableColumn<Product, String> columnName;
 
     @FXML
     private TableColumn<?, ?> columnManufacturer;
@@ -60,6 +70,7 @@ public class Controller {
             productTypeBox.getItems().add("Type " + count);
 
         }*/
+        setupProductLineTable();
         for(ItemType id: ItemType.values()){
             productTypeBox.getItems().add(id.getItemType());
         }
@@ -67,8 +78,8 @@ public class Controller {
         productTypeBox.getSelectionModel().selectFirst();
 
 
-        setupProductLineTable();
 
+        DbConnect.productLine.addAll(DbConnect.getProductsDB());
     }
 
 
@@ -79,19 +90,18 @@ public class Controller {
 
     private void setupProductLineTable(){
 
-        tableProducts.setItems(productLine);
+        //tableProducts.setItems(DbConnect.productLine);
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+       // columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnManufacturer.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
         columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
 
+        columnName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
+
+        tableProducts.setItems(tableProducts.getItems());
+
 
     }
-
-
-
-
-
 
 
     public void connectToDbUpdate() { //I want this function to be called when you press the add product button.
@@ -126,6 +136,7 @@ public class Controller {
 
 
 
+
            // String sqlIn = "INSERT INTO PRODUCT(ID, NAME, MANUFACTURER, TYPE) VALUES((SELECT MAX(ID) FROM PRODUCT) +1 " + ", '" + productName + "', '" + productManufacturer + "', '" + productType + "')";
             //I wasted a lot of time trying to insert the next id; i didn't realize that the sql db already had auto_increment.
             //String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES("+ "'" + productName + "', '" + productManufacturer + "', '" + productType + "')"; //apparently this isn't good.
@@ -145,11 +156,16 @@ public class Controller {
             ResultSet rs = stmt.executeQuery(sqlOut); //executeQuery grabs info from the db
             rs.next();
             System.out.println(sqlOut);
-            System.out.println(rs.getString(1));
+            String idRow = rs.getString(1);
+            System.out.println(idRow);
             System.out.println(rs.getString(2));
             System.out.println(rs.getString(3));
 
             //tableColumn1.setText(rs.getString(1)); //how????
+           // columnName.setText(rs.getString(1));
+            TableColumn<Map, String> columnName = new TableColumn<>(idRow);
+            columnName.setCellValueFactory(new MapValueFactory<>("id"));
+
 
 
             // STEP 4: Clean-up environment
