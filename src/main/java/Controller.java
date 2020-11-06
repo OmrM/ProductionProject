@@ -135,8 +135,9 @@ public class Controller {
         while(rs.next()){
             int id = rs.getInt(1);
             String name = rs.getNString(2);
-            String manufacturer = rs.getString(3);
-            String type  = rs.getString(4);
+            String type  = rs.getString(3);
+            String manufacturer = rs.getString(4);
+
             ItemType tempType = ItemType.AUDIO;
             if (type.equals("AUDIO")) {
 
@@ -160,29 +161,10 @@ public class Controller {
 
             Product dbProduct = new Widget(id, name, manufacturer, tempType);// create widget object from database
             System.out.println(dbProduct.getId());
+            System.out.println(dbProduct.getManufacturer());
 
             productLine.add(dbProduct);//save widget/product objects to observable list
 
-
-
-/*
-
-            tableViewProducts.getColumns().add(columnID);
-            tableViewProducts.getItems().add(new Widget(id,name, manufacturer,tempType));
-
-
-
-            System.out.println("print dbproduct" + dbProduct.getManufacturer());
-            productLine.add(dbProduct);
-            listView.getItems().add(dbProduct);
-
-
-                columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
-                columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
-                columnManufacturer.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
-                columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-*/
 
 }
 

@@ -32,11 +32,20 @@
     -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
+.choice-box{
+    -fx-mark-color: blue;
+    -fx-text-fill: black;
+}
+.choice-box .context-menu {
+    -fx-background-color:lightgray;
+}
 
+.choice-box .label{
+    -fx-text-fill: black;
+}
 
 .tab-pane .tab:selected{
     -fx-background-color: #989898;
-
 
 }
 
@@ -77,7 +86,7 @@
 }
 
 .table-view .table-cell{
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 

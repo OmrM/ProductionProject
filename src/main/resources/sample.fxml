@@ -38,10 +38,10 @@
                            <children>
                               <TextField fx:id="name" prefHeight="28.0" prefWidth="265.0" GridPane.columnIndex="1" />
                               <TextField fx:id="manufacturer" prefHeight="28.0" prefWidth="218.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ChoiceBox fx:id="productTypeBox" prefHeight="25.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <ChoiceBox fx:id="productTypeBox" prefHeight="25.0" prefWidth="213.0" stylesheets="@javaFX.css" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="142.0" text=" Product Name" />
                               <Label prefHeight="17.0" prefWidth="133.0" text=" Manufacturer" GridPane.rowIndex="1" />
-                              <Label prefHeight="17.0" prefWidth="129.0" text=" Item Type" GridPane.rowIndex="2" />
+                              <Label prefHeight="17.0" prefWidth="129.0" text=" Item Type" textFill="WHITE" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <Button fx:id="addProductButton" layoutX="429.0" layoutY="190.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="30.0" prefWidth="137.0" text="Add Product" />
@@ -53,7 +53,7 @@
                               <TableColumn fx:id="columnType" prefWidth="172.0" text="Item Type" />
                           </columns>
                         </TableView>
-                        <Label layoutX="28.0" layoutY="231.0" prefHeight="17.0" prefWidth="135.0" text=" Existing Products" />
+                        <Label layoutX="28.0" layoutY="231.0" prefHeight="17.0" prefWidth="135.0" text=" Existing Products" textFill="#fffdfd" />
                      </children>
                   </AnchorPane>
                </content>
