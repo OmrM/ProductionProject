@@ -45,7 +45,7 @@
                            </children>
                         </GridPane>
                         <Button fx:id="addProductButton" layoutX="429.0" layoutY="190.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="30.0" prefWidth="137.0" text="Add Product" />
-                        <TableView fx:id="tableProducts" layoutX="28.0" layoutY="249.0" prefHeight="233.0" prefWidth="541.0" stylesheets="@javaFX.css">
+                        <TableView fx:id="tableViewProducts" layoutX="28.0" layoutY="249.0" prefHeight="233.0" prefWidth="541.0" stylesheets="@javaFX.css">
                           <columns>
                             <TableColumn fx:id="columnID" prefWidth="92.0" text="Product ID" />
                             <TableColumn fx:id="columnName" prefWidth="135.0" text="Product Name" />

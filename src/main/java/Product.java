@@ -50,12 +50,13 @@ public abstract class Product implements Item {
         this.name = name;
     }
 
-    public ItemType getType() {
-        return type;
-    }
+
 
     public void setType(ItemType type) {
         this.type = type;
+    }
+    public ItemType getType() {
+        return type;
     }
 
 
