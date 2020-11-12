@@ -2,10 +2,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 
 import java.sql.*;
 
@@ -31,7 +29,7 @@ public class Controller {
     private TableColumn<?, ?> columnID;
 
     @FXML
-    private TableColumn<Product, String> columnName;
+    private TableColumn<?, ?> columnName;
 
     @FXML
     private TableColumn<?, ?> columnManufacturer;
@@ -41,8 +39,10 @@ public class Controller {
 
 
     @FXML
-    private ComboBox<?> comboBoxQty;
+    private ListView<Product> listViewProds;
 
+    @FXML
+    private ComboBox<?> comboBoxQty;
 
     final String JDBC_DRIVER = "org.h2.Driver";
     final String DB_URL = "jdbc:h2:./res/Production";
@@ -137,12 +137,12 @@ public class Controller {
             productLine.add(dbProduct);//save widget/product objects to observable list
             // productLine.addAll();
             columnID.setCellValueFactory(new PropertyValueFactory("id"));
-           // columnName.setCellValueFactory(new PropertyValueFactory("name"));
+            columnName.setCellValueFactory(new PropertyValueFactory("name"));
             columnManufacturer.setCellValueFactory(new PropertyValueFactory("manufacturer"));
             columnType.setCellValueFactory(new PropertyValueFactory("type"));
 
             //ListView listView = new ListView();
-           // listViewProds.setItems(productLine);
+            listViewProds.setItems(productLine);
             //listViewProds.getItems().add(dbProduct);
 
 
