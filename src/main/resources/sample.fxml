@@ -47,11 +47,11 @@
                         <Button fx:id="addProductButton" layoutX="429.0" layoutY="190.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="30.0" prefWidth="137.0" text="Add Product" />
                         <TableView fx:id="tableViewProducts" layoutX="28.0" layoutY="249.0" prefHeight="233.0" prefWidth="541.0" stylesheets="@javaFX.css">
                           <columns>
-                            <TableColumn fx:id="columnID" prefWidth="92.0" text="Product ID" />
-                              <TableColumn fx:id="columnName" prefWidth="172.0" text="Name" />
+                            <TableColumn fx:id="columnID" prefWidth="78.0" text="Product ID" />
+                              <TableColumn fx:id="columnName" prefWidth="171.0" text="Name" />
                            
-                              <TableColumn fx:id="columnManufacturer" prefWidth="145.0" text="Manufacturer" />
-                              <TableColumn fx:id="columnType" prefWidth="172.0" text="Item Type" />
+                              <TableColumn fx:id="columnManufacturer" prefWidth="146.0" text="Manufacturer" />
+                              <TableColumn fx:id="columnType" prefWidth="145.0" text="Item Type" />
                           </columns>
                         </TableView>
                         <Label layoutX="28.0" layoutY="231.0" prefHeight="17.0" prefWidth="135.0" text=" Existing Products" textFill="#fffdfd" />
@@ -76,7 +76,7 @@
                <content>
                   <AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="603.0">
                      <children>
-                        <TextArea layoutX="91.0" layoutY="38.0" prefHeight="321.0" prefWidth="415.0" stylesheets="@javaFX.css" />
+                        <TextArea fx:id="productionRecordLog" layoutX="91.0" layoutY="38.0" prefHeight="321.0" prefWidth="415.0" stylesheets="@javaFX.css" />
                      </children>
                   </AnchorPane>
                </content>

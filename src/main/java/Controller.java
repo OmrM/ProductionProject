@@ -9,10 +9,7 @@ import java.sql.*;
 
 public class Controller {
     @FXML
-    private Label lblOutput;
-    @FXML
     private TextArea taOutput;
-
     @FXML
     private TextField name;
 
@@ -42,7 +39,10 @@ public class Controller {
     private ListView<Product> listViewProds;
 
     @FXML
-    private ComboBox<?> comboBoxQty;
+    private ComboBox<String> comboBoxQty;
+
+    @FXML
+    private TextArea productionRecordLog;
 
     final String JDBC_DRIVER = "org.h2.Driver";
     final String DB_URL = "jdbc:h2:./res/Production";
@@ -57,19 +57,27 @@ public class Controller {
 
 
 //productionLog arraylist
-    //productionrun arraylist
+// productionrun arraylist
 
 
     public void initialize() throws SQLException {
-        //I should probably update the table view inside of this, so it will refresh
+
         comboBoxQty.setEditable(true);
         comboBoxQty.getSelectionModel().selectFirst(); //this is to select and display the first thing on the list on the combobox. located in the produce tab
+        for(int count = 1; count <= 10; count ++){
+            comboBoxQty.getItems().add(String.valueOf(count +1));
+
+        }
+
 
         for(ItemType id: ItemType.values()){
             productTypeBox.getItems().add(id.getItemType());
         }
         productTypeBox.getSelectionModel().selectFirst();//this is to select and display the first thing on the list on the choiceBox. in product line tab
+
         setupProductLineTable();
+
+        //productionRecordLog.setText(ProductionRecord.)
 
 
     }
@@ -79,6 +87,7 @@ public class Controller {
 
     public void recordProduction(ActionEvent event) {
         System.out.println("Record Production");
+        outputProductLog();
     }
 
     public void addProduct(ActionEvent event) {
@@ -88,6 +97,21 @@ public class Controller {
 
 
 
+public void outputProductLog(){
+
+        Product productProduced = new Widget(1,"iPod", "Apple", ItemType.AUDIO);
+        int numProduced = Integer.parseInt(comboBoxQty.getValue());
+        System.out.println("number produced : " + numProduced);
+
+       int itemCount = 0;
+        for (int productionRunProduct = 0; productionRunProduct < numProduced; productionRunProduct++) {
+             ProductionRecord pr = new ProductionRecord(productProduced, itemCount++);
+            // using the iterator as the product id for testing
+            System.out.println(pr.toString());
+            productionRecordLog.appendText(pr.toString());
+
+    }
+}
 
 
 
@@ -131,8 +155,8 @@ public class Controller {
             }
                 //System.out.println(id+name+ manufacturer+type);
             Product dbProduct = new Widget(id, name, manufacturer, tempType);// create widget object from database
-            System.out.println(dbProduct.getId());
-            System.out.println(dbProduct.getManufacturer());
+            //System.out.println(dbProduct.getId());
+            //System.out.println(dbProduct.getManufacturer());
 
             productLine.add(dbProduct);//save widget/product objects to observable list
             // productLine.addAll();
@@ -143,7 +167,7 @@ public class Controller {
 
             //ListView listView = new ListView();
             listViewProds.setItems(productLine);
-            //listViewProds.getItems().add(dbProduct);
+
 
 
         }
