@@ -1,18 +1,13 @@
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.sql.*;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 
 public class Controller {
     @FXML
@@ -25,10 +20,8 @@ public class Controller {
 
     @FXML
     private TextField manufacturer;
-    @FXML
-    private ComboBox<String> quantityBox;
-    @FXML
-    private Button addProductButton;
+
+//
     @FXML
     private ChoiceBox<String> productTypeBox;
     @FXML
@@ -47,6 +40,10 @@ public class Controller {
     private TableColumn<?, ?> columnType;
 
 
+    @FXML
+    private ComboBox<?> comboBoxQty;
+
+
     final String JDBC_DRIVER = "org.h2.Driver";
     final String DB_URL = "jdbc:h2:./res/Production";
 
@@ -57,40 +54,27 @@ public class Controller {
     Statement stmt = null;
     static final ObservableList<Product> productLine = FXCollections.observableArrayList();
 
-    private //ListView listView;
-    ListView<Product> listView = new ListView<>(productLine);
 
 
+//productionLog arraylist
+    //productionrun arraylist
 
 
     public void initialize() throws SQLException {
         //I should probably update the table view inside of this, so it will refresh
-        quantityBox.setEditable(true);
-        quantityBox.getSelectionModel().selectFirst(); //this is to select the first thing on the list.
-/*        for(int count = 1; count <= 10; count ++){
-            quantityBox.getItems().add(String.valueOf(count));
-
-            productTypeBox.getItems().add("Type " + count);
-
-        }*/
-
+        comboBoxQty.setEditable(true);
+        comboBoxQty.getSelectionModel().selectFirst(); //this is to select and display the first thing on the list on the combobox. located in the produce tab
 
         for(ItemType id: ItemType.values()){
             productTypeBox.getItems().add(id.getItemType());
         }
-
-        productTypeBox.getSelectionModel().selectFirst();
+        productTypeBox.getSelectionModel().selectFirst();//this is to select and display the first thing on the list on the choiceBox. in product line tab
         setupProductLineTable();
 
-        columnID.setCellValueFactory(new PropertyValueFactory("id"));
-        columnName.setCellValueFactory(new PropertyValueFactory("name"));
-        columnManufacturer.setCellValueFactory(new PropertyValueFactory("manufacturer"));
-        columnType.setCellValueFactory(new PropertyValueFactory("type"));
 
-
-
-        productLine.addAll();
     }
+
+
 
 
     public void recordProduction(ActionEvent event) {
@@ -105,19 +89,7 @@ public class Controller {
 
 
 
-//opens connection to database
-//returns conn
-    public Connection connectToDB() {
-        try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL);
 
-
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
 
 
 
@@ -133,49 +105,50 @@ public class Controller {
         System.out.println(sqlOut);
         ResultSet rs = stmt.executeQuery(sqlOut);
         while(rs.next()){
+            ItemType tempType = null;
             int id = rs.getInt(1);
-            String name = rs.getNString(2);
-            String type  = rs.getString(3);
+            String name = rs.getString(2);
+            String typeString  = rs.getString(3);
             String manufacturer = rs.getString(4);
 
-            ItemType tempType = ItemType.AUDIO;
-            if (type.equals("AUDIO")) {
+
+            if (typeString.equals("AU")) {
 
                 tempType = ItemType.AUDIO;
 
-            } else if (type.equals("VISUAL")) {
+            } else if (typeString.equals("VI")) {
 
                 tempType = ItemType.VISUAL;
 
-            } else if (type.equals("AUDIO_MOBILE")) {
+            } else if (typeString.equals("AM")) {
 
                 tempType = ItemType.AUDIO_MOBILE;
 
-            } else if (type.equals("VISUAL_MOBILE")) {
+            } else if (typeString.equals("VM")){
 
                 tempType = ItemType.VISUAL_MOBILE;
 
             }
-
                 //System.out.println(id+name+ manufacturer+type);
-
             Product dbProduct = new Widget(id, name, manufacturer, tempType);// create widget object from database
             System.out.println(dbProduct.getId());
             System.out.println(dbProduct.getManufacturer());
 
             productLine.add(dbProduct);//save widget/product objects to observable list
+            // productLine.addAll();
+            columnID.setCellValueFactory(new PropertyValueFactory("id"));
+           // columnName.setCellValueFactory(new PropertyValueFactory("name"));
+            columnManufacturer.setCellValueFactory(new PropertyValueFactory("manufacturer"));
+            columnType.setCellValueFactory(new PropertyValueFactory("type"));
+
+            //ListView listView = new ListView();
+           // listViewProds.setItems(productLine);
+            //listViewProds.getItems().add(dbProduct);
 
 
-}
-
-
-
-        VBox vbox = new VBox(tableViewProducts);
-
-
-        Scene scene = new Scene(vbox);
-
-
+        }
+/*        VBox vbox = new VBox(tableViewProducts);
+        Scene scene = new Scene(vbox);*/
     }
 
 
@@ -187,16 +160,12 @@ public class Controller {
 
 
         public void updateProductsDB() { //I want this function to be called when you press the add product button.
-        //it should take what's in the text fields and put it into the table
+        //it should take what's in the text fields and put it into the db table
         // it should also call the function to output that info into the tableview
 
         try {
             // STEP 1: Register JDBC driver
-           // Class.forName(JDBC_DRIVER);
-            //Class.forName(new org.h2.Driver());
-
             //STEP 2: Open a connection
-            //conn = DriverManager.getConnection(DB_URL, USER, PASS);
             conn = connectToDB();
             stmt = conn.createStatement();
             //STEP 3: Execute a query
@@ -208,10 +177,8 @@ public class Controller {
 
 
             // String sqlIn = "INSERT INTO PRODUCT(ID, NAME, MANUFACTURER, TYPE) VALUES((SELECT MAX(ID) FROM PRODUCT) +1 " + ", '" + productName + "', '" + productManufacturer + "', '" + productType + "')";
-            //I wasted a lot of time trying to insert the next id; i didn't realize that the sql db already had auto_increment.
-            //String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES("+ "'" + productName + "', '" + productManufacturer + "', '" + productType + "')"; //apparently this isn't good.
             final String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES(?,?,?)";
-            PreparedStatement ps = conn.prepareStatement(sqlIn); //creating object named ps from class PreparedStatement, i guess.
+            PreparedStatement ps = conn.prepareStatement(sqlIn); //creating object named ps from class PreparedStatement
             ps.setString(1, productName);
             ps.setString(2, productManufacturer);
             ps.setString(3,productType);
@@ -220,19 +187,18 @@ public class Controller {
             // stmt.executeUpdate(sqlIn); //
 
 
-            //to print out the newest record into the console:
+            //prints out the newest record into the console:
             String sqlOut = "SELECT ID, NAME, MANUFACTURER, TYPE FROM PRODUCT WHERE ID= (SELECT MAX(ID) FROM PRODUCT)";
 
             ResultSet rs = stmt.executeQuery(sqlOut); //executeQuery grabs info from the db
             rs.next();
             System.out.println(sqlOut);
-            String idRow = rs.getString(1);
-            System.out.println(idRow);
+            System.out.println(rs.getString(1));
             System.out.println(rs.getString(2));
             System.out.println(rs.getString(3));
 
-            //tableColumn1.setText(rs.getString(1)); //how????
-
+           //calls function that updates the table.
+            setupProductLineTable();
 
             // STEP 4: Clean-up environment
 
@@ -246,5 +212,45 @@ public class Controller {
         }
         }
 
+
+
+
+
+        //opens connection to database
+//returns conn
+    public Connection connectToDB() {
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL);
+
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }
+
 }
 
+
+
+
+
+
+
+
+
+
+/*
+
+*/
+/*        for(int count = 1; count <= 10; count ++){
+            quantityBox.getItems().add(String.valueOf(count));
+
+            productTypeBox.getItems().add("Type " + count);
+
+        }*//*
+
+        for(ItemType id: ItemType.values()){
+                productTypeBox.getItems().add(id.getItemType());
+                }*/

@@ -48,7 +48,7 @@
                         <TableView fx:id="tableViewProducts" layoutX="28.0" layoutY="249.0" prefHeight="233.0" prefWidth="541.0" stylesheets="@javaFX.css">
                           <columns>
                             <TableColumn fx:id="columnID" prefWidth="92.0" text="Product ID" />
-                            <TableColumn fx:id="columnName" prefWidth="135.0" text="Product Name" />
+                           
                               <TableColumn fx:id="columnManufacturer" prefWidth="145.0" text="Manufacturer" />
                               <TableColumn fx:id="columnType" prefWidth="172.0" text="Item Type" />
                           </columns>
@@ -62,10 +62,10 @@
                <content>
                   <AnchorPane focusTraversable="true" prefHeight="179.0" prefWidth="541.0">
                      <children>
-                        <ListView layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="564.0" />
+                        <ListView fx:id="listViewProds" layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="564.0" />
                         <Label layoutX="16.0" layoutY="14.0" text="Choose Product" />
                         <Label layoutX="14.0" layoutY="288.0" text="Choose Quantity" />
-                        <ComboBox fx:id="quantityBox" layoutX="16.0" layoutY="315.0" prefWidth="150.0" promptText="1" stylesheets="@javaFX.css" /> <!--make this be type string-->
+                        <ComboBox fx:id="comboBoxQty" layoutX="16.0" layoutY="315.0" prefWidth="150.0" promptText="1" stylesheets="@javaFX.css" /> <!--make this be type string-->
                         <Button fx:id="recordProductionButton" layoutX="14.0" layoutY="372.0" mnemonicParsing="false" onAction="#recordProduction" text="Record Production" />
                      </children>
                   </AnchorPane>
