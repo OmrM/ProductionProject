@@ -1,11 +1,15 @@
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import java.util.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Controller {
     @FXML
@@ -53,11 +57,13 @@ public class Controller {
     Connection conn = null;
     Statement stmt = null;
     static final ObservableList<Product> productLine = FXCollections.observableArrayList();
+    static final ObservableList<ProductionRecord> productRecList = FXCollections.observableArrayList();
 
 
-
-//productionLog arraylist
-// productionrun arraylist
+    private int countAU = 0 ;
+    private int countVI = 0;
+    private int countAM = 0 ;
+    private int countVM = 0;
 
 
     public void initialize() throws SQLException {
@@ -76,6 +82,10 @@ public class Controller {
         productTypeBox.getSelectionModel().selectFirst();//this is to select and display the first thing on the list on the choiceBox. in product line tab
 
         setupProductLineTable();
+        //setupProductionLog();
+
+
+        //outputProdLogTxt();
 
         //productionRecordLog.setText(ProductionRecord.)
 
@@ -85,39 +95,79 @@ public class Controller {
 
 
 
-    public void recordProduction(ActionEvent event) {
-        System.out.println("Record Production");
-        outputProductLog();
-    }
-
     public void addProduct(ActionEvent event) {
         System.out.println("Add Product");
+
         updateProductsDB();
     }
+    public void recordProduction(ActionEvent event) {
+       // System.out.println("Record Production");
 
+       // updateProdRecordDB();
+       // outputProdLogTxt();
+        Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem();
+        // int id = Integer.parseInt(listViewProds.getId());
 
-
-public void outputProductLog(){
-
-        Product productProduced = new Widget(1,"iPod", "Apple", ItemType.AUDIO);
         int numProduced = Integer.parseInt(comboBoxQty.getValue());
-        System.out.println("number produced : " + numProduced);
+        ItemType type = selectedProduct.getType();
+        Date date = new Date();
+        Timestamp time = new Timestamp(date.getTime());
+        String manufacturer = selectedProduct.getManufacturer();
+        //int itemCount; //I'll need to find a way to count to number of same items here
+        String serialNumber = "";
 
-       int itemCount = 0;
-        for (int productionRunProduct = 0; productionRunProduct < numProduced; productionRunProduct++) {
-             ProductionRecord pr = new ProductionRecord(productProduced, itemCount++);
-            // using the iterator as the product id for testing
+        if (type.equals(ItemType.AUDIO)) {
+            countAU += numProduced;
+
+            for (int productionRunProduct = 0; productionRunProduct < countAU; productionRunProduct++) {//
+                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                productionRecordLog.appendText(pr.toString() + "\n");
+            }
+
+        } else if (type.equals(ItemType.VISUAL)) {
+            countVI += numProduced;
+                for (int productionRunProduct = 0; productionRunProduct < countVI; productionRunProduct++) {//
+                    ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                    productionRecordLog.appendText(pr.toString() + "\n");
+
+
+                }
+
+        } else if (type.equals(ItemType.AUDIO_MOBILE)) {
+            countAM += numProduced;
+            for (int productionRunProduct = 0; productionRunProduct < countAM; productionRunProduct++) {//
+                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                productionRecordLog.appendText(pr.toString() + "\n");
+            }
+
+        } else{
+            countVM+= numProduced;
+            for (int productionRunProduct = 0; productionRunProduct < countVM; productionRunProduct++) {//
+                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                productionRecordLog.appendText(pr.toString() + "\n");
+            }
+        }
+/*        for (int productionRunProduct = 0; productionRunProduct < numProduced; productionRunProduct++) {//
+
+            ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
             System.out.println(pr.toString());
-            productionRecordLog.appendText(pr.toString());
+
+        }*/
+    }
+    public void setupProductionLog(){
 
     }
-}
 
 
 
 
 
-/*Gets list of products in database*/
+/*Gets list of products in database. puts them into the tableview*/
     private void setupProductLineTable() throws SQLException {
         conn = connectToDB();
         stmt = conn.createStatement();
@@ -128,6 +178,7 @@ public void outputProductLog(){
         //PreparedStatement stmt = conn.prepareStatement(sqlOut);
         System.out.println(sqlOut);
         ResultSet rs = stmt.executeQuery(sqlOut);
+
         while(rs.next()){
             ItemType tempType = null;
             int id = rs.getInt(1);
@@ -166,13 +217,18 @@ public void outputProductLog(){
             columnType.setCellValueFactory(new PropertyValueFactory("type"));
 
             //ListView listView = new ListView();
-            listViewProds.setItems(productLine);
+
 
 
 
         }
+        listViewProds.setItems(productLine);
 /*        VBox vbox = new VBox(tableViewProducts);
         Scene scene = new Scene(vbox);*/
+        rs.close();
+
+        stmt.close();
+        conn.close();
     }
 
 
@@ -222,7 +278,7 @@ public void outputProductLog(){
             System.out.println(rs.getString(3));
 
            //calls function that updates the table.
-            setupProductLineTable();
+           setupProductLineTable();////////////////////////////////////////////////////////////////////////////////////////////////help
 
             // STEP 4: Clean-up environment
 

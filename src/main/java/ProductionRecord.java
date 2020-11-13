@@ -1,11 +1,12 @@
 import java.util.*;
 public class ProductionRecord {
+
     private int productionNumber;
     private int productID;
     private String serialNumber;
-    private Date dateProduced = new Date();
-    private Product product;
-    int itemCount;
+    private Date dateProduced;
+
+
 
 
     // the correct way to get today's date
@@ -69,9 +70,23 @@ public class ProductionRecord {
     }
     //Overload the ProductionRecord constructor to accept a Product and an int which holds the count of the number of items of its type that have been created. (You can write the code to generate the count later.)
     public ProductionRecord(Product product, int itemCount){
-        this.itemCount = itemCount; //need to write code to get number of items of its type****************************
-        this.serialNumber = Widget.createSerialNumber(product.getManufacturer(),product.getType(), itemCount);
-        this.product = product;
+        this.serialNumber = createSerialNumber(product.getManufacturer(),product.getType(), itemCount);
+        this.dateProduced = new Date();
+
+    }
+
+
+
+    public String createSerialNumber(String manufacturer, ItemType type, int itemCount) {
+
+
+        //String serialNumber = manufacturer.substring(0, 3) + type.getItemType()+ "0000"+ itemCount;
+        String serialNumber = manufacturer.substring(0, 3) + type.getItemType()+ String.format("%05d",itemCount);
+        return serialNumber;
+
+
+
+
     }
 
 
