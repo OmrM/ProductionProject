@@ -1,20 +1,16 @@
-/**
- * contains an initialize method and event handlers for the action events
- * @author Omar Muniz
- */
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import java.util.*;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Date;
 
+/**contains an initialize method and event handlers for the action events
+ * @author Omar Muniz
+ */
 public class Controller {
     @FXML
     private TextArea taOutput;
@@ -162,7 +158,7 @@ public class Controller {
 
     /**
      * Gets list of products in database. puts them into the tableview*
-     * @throws SQLException
+     *
      */
     private void setupProductLineTable() throws SQLException {
         conn = connectToDB();
@@ -284,7 +280,7 @@ public class Controller {
 
     /**
      * creates a connection to the database
-     * @return conn
+     * @return conn connection
      */
     public Connection connectToDB() {
         try {

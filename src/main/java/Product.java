@@ -9,9 +9,9 @@ public abstract class Product implements Item {
 
     /**
      * constructor for product
-     * @param name
-     * @param manufacturer
-     * @param type
+     * @param name name
+     * @param manufacturer  manufacturer
+     * @param type type
      */
     Product(String name, String manufacturer, ItemType type) {
         this.name = name;
@@ -21,10 +21,10 @@ public abstract class Product implements Item {
 
     /**
      * constructor that holds an in id
-     * @param id
-     * @param name
-     * @param manufacturer
-     * @param type
+     * @param id    id
+     * @param name  name
+     * @param manufacturer manufacturer
+     * @param type  type
      */
     public Product(int id, String name, String manufacturer, ItemType type) {
         this.id = id;
@@ -36,7 +36,7 @@ public abstract class Product implements Item {
 
     /**
      * To string method for product class
-     * @return
+     * @return formatted string
      */
     public String toString() {
         return "Name: " + name + "\n" + "Manufacturer: " + manufacturer + "\n" + "Type: "

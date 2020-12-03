@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class Employee {
 
-    String name;
+    final String name;
     String userName;
     String password;
     String email;
@@ -16,8 +16,8 @@ public class Employee {
      *  If the password is valid (containing a lowercase letter, uppercase letter, and a special character)
      *     the password field gets set to the supplied password.
      *     If the password is invalid, the password field gets set to "pw".
-     * @param name
-     * @param password
+     * @param name name parameter
+     * @param password password
      */
     Employee(String name, String password) {
 
@@ -43,8 +43,8 @@ public class Employee {
 
     /**********************************************************
      * method checks if the name contains a space.
-     * @param name
-     * @return
+     * @param name name variable
+     * @return boolean
      ***********************************************************/
     private boolean checkName(String name){
 
@@ -66,8 +66,6 @@ public class Employee {
     /**********************************************************
      * setUsername will set the username field to the first initial of the first name
      * and then the last name, all lowercase.
-     * @param
-     * @return
      ***********************************************************/
     private void setUsername(){
 
@@ -84,11 +82,9 @@ public class Employee {
     /**********************************************************
      * setEmail will set the email field to the first name,
      * then a period, then the last name (all lowercase) followed by @oracleacademy.Test
-     * @param
-     * @return
      ***********************************************************/
     private void setEmail(){
-        String firstName = name.substring(0, name.indexOf(" ")).toLowerCase(); /////brokedsdd
+        String firstName = name.substring(0, name.indexOf(" ")).toLowerCase();
         String lastName = name.substring(name.indexOf(" ") + 1).toLowerCase();
         this.email = firstName + "." + lastName + "@oracleacademy.Test";
 
@@ -99,8 +95,6 @@ public class Employee {
 
     /**********************************************************
      * checks if it's a valid password
-     * @param
-     * @return
      ***********************************************************/
     private boolean isValidPassword(){
         Pattern letters = Pattern.compile("[A-Z]"); //checks if it contains uppercase

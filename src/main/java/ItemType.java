@@ -2,7 +2,7 @@ public enum ItemType {
 
     AUDIO("AU"), VISUAL("VI"), AUDIO_MOBILE("AM"), VISUAL_MOBILE("VM");
 
-    private String label; //private constructor
+    private final String label; //private constructor
     ItemType(String c){
         label = c;
     }
