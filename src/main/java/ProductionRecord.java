@@ -6,14 +6,15 @@ public class ProductionRecord {
     private String serialNumber;
     private Date dateProduced;
 
+    /**
+     * ProductionRecord class can create a timestamp, serial number
+     * allows us to choose the item count
+     * @author Omar Muniz
+     */
 
 
-
-    // the correct way to get today's date
+    // another way to get date:
     //Date today = Calendar.getInstance().getTime();
-
-
-
 
     public void setProductionNum(int productionNumber) {
         this.productionNumber = productionNumber;
@@ -48,7 +49,11 @@ public class ProductionRecord {
         return productID;
     }
 
-    //Make one constructor that just has a parameter for the productID. This will be the constructor called when the user records production from the user interface.
+    /**
+     * Make one constructor that just has a parameter for the productID.
+     * This will be the constructor called when the user records production from the user interface.
+     * @param productID
+     */
     public ProductionRecord(int productID){
         productionNumber  = 0;
         serialNumber = "0";
@@ -56,8 +61,14 @@ public class ProductionRecord {
         //return productionNumber;
     }
 
-    //Create an overloaded constructor to use when creating ProductionRecord objects from the database.
-    // //This constructor needs parameters for all fields.
+    /**
+     * Create an overloaded constructor to use when creating ProductionRecord objects from the database.
+     * This constructor needs parameters for all fields.
+     * @param productionNumber
+     * @param productID
+     * @param serialNumber
+     * @param dateProduced
+     */
     public ProductionRecord(int productionNumber, int productID, String serialNumber,Date dateProduced) {
 
         this.productionNumber = productionNumber;
@@ -68,7 +79,14 @@ public class ProductionRecord {
         //  return String.valueOf(productionNumber);
 
     }
-    //Overload the ProductionRecord constructor to accept a Product and an int which holds the count of the number of items of its type that have been created. (You can write the code to generate the count later.)
+
+
+    /**
+     * Overload the ProductionRecord constructor to accept a Product and an int which holds the count
+     *  of the number of items of its type that have been created.
+     * @param product
+     * @param itemCount
+     */
     public ProductionRecord(Product product, int itemCount){
         this.serialNumber = createSerialNumber(product.getManufacturer(),product.getType(), itemCount);
         this.dateProduced = new Date();
@@ -76,21 +94,25 @@ public class ProductionRecord {
     }
 
 
-
+    /**
+     * generates a serial number
+     * @param manufacturer
+     * @param type
+     * @param itemCount
+     * @return
+     */
     public String createSerialNumber(String manufacturer, ItemType type, int itemCount) {
-
-
         //String serialNumber = manufacturer.substring(0, 3) + type.getItemType()+ "0000"+ itemCount;
         String serialNumber = manufacturer.substring(0, 3) + type.getItemType()+ String.format("%05d",itemCount);
         return serialNumber;
 
-
-
-
     }
 
 
-
+    /**
+     * to string method to display the production number,id, serial number, and date
+     * @return
+     */
     public String toString(){
         return "Prod. Num: " + productionNumber + " Product ID: " + productID + " Serial Num: " + serialNumber + " Date: " + dateProduced + "\n";
     }

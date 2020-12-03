@@ -1,4 +1,8 @@
-import javafx.beans.Observable;
+/**
+ * contains an initialize method and event handlers for the action events
+ * @author Omar Muniz
+ */
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,35 +20,24 @@ public class Controller {
     private TextArea taOutput;
     @FXML
     private TextField name;
-
     @FXML
     private TextField manufacturer;
-
-//
     @FXML
     private ChoiceBox<String> productTypeBox;
     @FXML
     private TableView<Product> tableViewProducts;
-
     @FXML
     private TableColumn<?, ?> columnID;
-
     @FXML
     private TableColumn<?, ?> columnName;
-
     @FXML
     private TableColumn<?, ?> columnManufacturer;
-
     @FXML
     private TableColumn<?, ?> columnType;
-
-
     @FXML
     private ListView<Product> listViewProds;
-
     @FXML
     private ComboBox<String> comboBoxQty;
-
     @FXML
     private TextArea productionRecordLog;
 
@@ -66,42 +59,44 @@ public class Controller {
     private int countVM = 0;
 
 
+    /**
+     * Initialize method
+     *
+     */
     public void initialize() throws SQLException {
 
         comboBoxQty.setEditable(true);
         comboBoxQty.getSelectionModel().selectFirst(); //this is to select and display the first thing on the list on the combobox. located in the produce tab
         for(int count = 1; count <= 10; count ++){
             comboBoxQty.getItems().add(String.valueOf(count +1));
-
         }
-
 
         for(ItemType id: ItemType.values()){
             productTypeBox.getItems().add(id.getItemType());
         }
         productTypeBox.getSelectionModel().selectFirst();//this is to select and display the first thing on the list on the choiceBox. in product line tab
-
         setupProductLineTable();
         //setupProductionLog();
-
-
         //outputProdLogTxt();
-
         //productionRecordLog.setText(ProductionRecord.)
 
-
     }
 
 
 
-
+    /**
+     * adds a product to the database
+     */
     public void addProduct(ActionEvent event) {
         System.out.println("Add Product");
-
         updateProductsDB();
     }
+
+    /**
+     * records to the production log and outputs it to the text area
+     *
+     */
     public void recordProduction(ActionEvent event) {
-       // System.out.println("Record Production");
 
        // updateProdRecordDB();
        // outputProdLogTxt();
@@ -113,7 +108,6 @@ public class Controller {
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
         String manufacturer = selectedProduct.getManufacturer();
-        //int itemCount; //I'll need to find a way to count to number of same items here
         String serialNumber = "";
 
         if (type.equals(ItemType.AUDIO)) {
@@ -131,7 +125,6 @@ public class Controller {
                     ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
 
                     productionRecordLog.appendText(pr.toString() + "\n");
-
 
                 }
 
@@ -159,15 +152,18 @@ public class Controller {
 
         }*/
     }
-    public void setupProductionLog(){
 
+
+
+
+    public void setupProductionLog(){//displays log database into the text area
     }
 
 
-
-
-
-/*Gets list of products in database. puts them into the tableview*/
+    /**
+     * Gets list of products in database. puts them into the tableview*
+     * @throws SQLException
+     */
     private void setupProductLineTable() throws SQLException {
         conn = connectToDB();
         stmt = conn.createStatement();
@@ -210,17 +206,13 @@ public class Controller {
             //System.out.println(dbProduct.getManufacturer());
 
             productLine.add(dbProduct);//save widget/product objects to observable list
-            // productLine.addAll();
+            productLine.addAll();
             columnID.setCellValueFactory(new PropertyValueFactory("id"));
             columnName.setCellValueFactory(new PropertyValueFactory("name"));
             columnManufacturer.setCellValueFactory(new PropertyValueFactory("manufacturer"));
             columnType.setCellValueFactory(new PropertyValueFactory("type"));
 
             //ListView listView = new ListView();
-
-
-
-
         }
         listViewProds.setItems(productLine);
 /*        VBox vbox = new VBox(tableViewProducts);
@@ -234,14 +226,11 @@ public class Controller {
 
 
 
-
-
-
-
-
-        public void updateProductsDB() { //I want this function to be called when you press the add product button.
-        //it should take what's in the text fields and put it into the db table
-        // it should also call the function to output that info into the tableview
+    /**This method will be called when you press the add product button.
+     * it should take what's in the text fields and put it into the db table
+     * it should also call the function to output that info into the tableview
+     */
+        public void updateProductsDB() {
 
         try {
             // STEP 1: Register JDBC driver
@@ -278,7 +267,7 @@ public class Controller {
             System.out.println(rs.getString(3));
 
            //calls function that updates the table.
-           setupProductLineTable();////////////////////////////////////////////////////////////////////////////////////////////////help
+           setupProductLineTable();
 
             // STEP 4: Clean-up environment
 
@@ -293,11 +282,10 @@ public class Controller {
         }
 
 
-
-
-
-        //opens connection to database
-//returns conn
+    /**
+     * creates a connection to the database
+     * @return conn
+     */
     public Connection connectToDB() {
         try {
             Class.forName(JDBC_DRIVER);
@@ -321,16 +309,3 @@ public class Controller {
 
 
 
-/*
-
-*/
-/*        for(int count = 1; count <= 10; count ++){
-            quantityBox.getItems().add(String.valueOf(count));
-
-            productTypeBox.getItems().add("Type " + count);
-
-        }*//*
-
-        for(ItemType id: ItemType.values()){
-                productTypeBox.getItems().add(id.getItemType());
-                }*/

@@ -2,21 +2,30 @@
 public abstract class Product implements Item {
 
     private int id;
-
-
-
     private String name;
     private String manufacturer;
     private ItemType type;
 
 
-    //constructor for product
+    /**
+     * constructor for product
+     * @param name
+     * @param manufacturer
+     * @param type
+     */
     Product(String name, String manufacturer, ItemType type) {
         this.name = name;
         this.manufacturer = manufacturer;
         this.type = type;
     }
 
+    /**
+     * constructor that holds an in id
+     * @param id
+     * @param name
+     * @param manufacturer
+     * @param type
+     */
     public Product(int id, String name, String manufacturer, ItemType type) {
         this.id = id;
         this.manufacturer = manufacturer;
@@ -24,11 +33,18 @@ public abstract class Product implements Item {
         this.type = type;
     }
 
-    //toString method for product
+
+    /**
+     * To string method for product class
+     * @return
+     */
     public String toString() {
         return "Name: " + name + "\n" + "Manufacturer: " + manufacturer + "\n" + "Type: "
                 + type;
     }
+
+
+
 
     public int getId() {
         return id;

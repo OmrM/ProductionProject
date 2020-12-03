@@ -10,9 +10,4 @@ public interface Item {
 
     String getManufacturer();
 
-/*    ItemType getType();
-
-
-
-    void setType(ItemType type);*/
 }
