@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="597.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <children>
+      <TabPane prefHeight="684.0" prefWidth="597.0">
+         <tabs>
+            <Tab fx:id="productLineTab" text="Product Line">
+               <content>
+                  <AnchorPane focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="488.0" prefWidth="597.0" stylesheets="@javaFX.css">
+                     <children>
+                        <GridPane alignment="CENTER" cache="true" cacheHint="SCALE_AND_ROTATE" gridLinesVisible="true" layoutX="28.0" layoutY="78.0" prefHeight="106.0" prefWidth="541.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="388.0" minWidth="10.0" prefWidth="283.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="211.0" minWidth="5.0" prefWidth="207.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="181.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="124.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="name" prefHeight="28.0" prefWidth="265.0" GridPane.columnIndex="1" />
+                              <TextField fx:id="manufacturer" prefHeight="28.0" prefWidth="218.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ChoiceBox fx:id="productTypeBox" prefHeight="25.0" prefWidth="213.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="142.0" text=" Product Name" />
+                              <Label prefHeight="17.0" prefWidth="133.0" text=" Manufacturer" GridPane.rowIndex="1" />
+                              <Label prefHeight="17.0" prefWidth="129.0" text=" Item Type" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <Button fx:id="addProductButton" layoutX="429.0" layoutY="190.0" mnemonicParsing="false" onAction="#addProduct" prefHeight="30.0" prefWidth="137.0" text="Add Product" />
+                        <TableView layoutX="28.0" layoutY="249.0" prefHeight="233.0" prefWidth="541.0" stylesheets="@javaFX.css">
+                          <columns>
+                            <TableColumn prefWidth="92.0" text="Product ID" />
+                            <TableColumn prefWidth="135.0" text="Product Name" />
+                              <TableColumn prefWidth="145.0" text="Manufacturer" />
+                              <TableColumn prefWidth="172.0" text="Item Type" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="253.0" layoutY="388.0" stylesheets="@javaFX.css" text="Existing Products" />
+                        <Label layoutX="28.0" layoutY="231.0" prefHeight="17.0" prefWidth="135.0" text=" Existing Products" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="produceTab" text="Produce">
+               <content>
+                  <AnchorPane focusTraversable="true" prefHeight="179.0" prefWidth="541.0">
+                     <children>
+                        <ListView layoutX="14.0" layoutY="39.0" prefHeight="200.0" prefWidth="564.0" />
+                        <Label layoutX="16.0" layoutY="14.0" text="Choose Product" />
+                        <Label layoutX="14.0" layoutY="288.0" text="Choose Quantity" />
+                        <ComboBox fx:id="quantityBox" layoutX="16.0" layoutY="315.0" prefWidth="150.0" promptText="1" stylesheets="@javaFX.css" /> <!--make this be type string-->
+                        <Button fx:id="recordProductionButton" layoutX="14.0" layoutY="372.0" mnemonicParsing="false" onAction="#recordProduction" text="Record Production" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="productionLogTab" text="Production Log">
+               <content>
+                  <AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="603.0">
+                     <children>
+                        <TextArea layoutX="91.0" layoutY="38.0" prefHeight="321.0" prefWidth="415.0" stylesheets="@javaFX.css" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+
+    </children>
+
+
+</Pane>
