@@ -46,7 +46,8 @@ public class Controller {
     Connection conn = null;
     Statement stmt = null;
     static final ObservableList<Product> productLine = FXCollections.observableArrayList();
-    static final ObservableList<ProductionRecord> productRecList = FXCollections.observableArrayList();
+    static final ObservableList<ProductionRecord> productionRun = FXCollections.observableArrayList();
+    //static final ObservableList<ProductionRecord> productRecList = FXCollections.observableArrayList();
 
 
     private int countAU = 0 ;
@@ -85,6 +86,7 @@ public class Controller {
      */
     public void addProduct(ActionEvent event) {
         System.out.println("Add Product");
+        tableViewProducts.getItems().clear(); //clears the tableview. otherwise, it would just append a copy of what's in the db
         updateProductsDB();
     }
 
@@ -95,7 +97,8 @@ public class Controller {
     public void recordProduction(ActionEvent event) {
 
        // updateProdRecordDB();
-       // outputProdLogTxt();
+       // outputProdLogTxt();\
+
         Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem();
         // int id = Integer.parseInt(listViewProds.getId());
 
@@ -152,7 +155,28 @@ public class Controller {
 
 
 
-    public void setupProductionLog(){//displays log database into the text area
+    public void setupProductionLog() throws SQLException {
+        conn = connectToDB();
+        stmt = conn.createStatement();
+
+        tableViewProducts.setItems(productLine);
+        TableView tableViewProducts = new TableView();
+        String sqlOut = "SELECT * FROM PRODUCT";
+        //PreparedStatement stmt = conn.prepareStatement(sqlOut);
+        System.out.println(sqlOut);
+        ResultSet rs = stmt.executeQuery(sqlOut);
+
+        while(rs.next()){
+
+        }
+        listViewProds.setItems(productLine);
+/*        VBox vbox = new VBox(tableViewProducts);
+        Scene scene = new Scene(vbox);*/
+        rs.close();
+
+        stmt.close();
+        conn.close();
+
     }
 
 
