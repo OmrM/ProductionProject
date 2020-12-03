@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**contains an initialize method and event handlers for the action events
@@ -73,15 +74,13 @@ public class Controller {
         }
         productTypeBox.getSelectionModel().selectFirst();//this is to select and display the first thing on the list on the choiceBox. in product line tab
         setupProductLineTable();
-        //setupProductionLog();
+        loadProductionLog();
         //outputProdLogTxt();
         //productionRecordLog.setText(ProductionRecord.)
 
     }
 
-
-
-    /**
+    /**Add Product Button
      * adds a product to the database
      */
     public void addProduct(ActionEvent event) {
@@ -90,88 +89,86 @@ public class Controller {
         updateProductsDB();
     }
 
-    /**
+
+    /**Record Production Button
      * records to the production log and outputs it to the text area
      *
+     *Get the selected product from the Product Line ListView and the quantity from the
+     *comboBox.
+     * Create an ArrayList of ProductionRecord objects named productionRun. *****************
+     *  Send the productionRun to an addToProductionDB method.
      */
-    public void recordProduction(ActionEvent event) {
+    public void recordProduction(ActionEvent event) throws SQLException {
+        Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem(); //selected product
+        int numProduced = Integer.parseInt(comboBoxQty.getValue());                     //quantity of product
 
-       // updateProdRecordDB();
-       // outputProdLogTxt();\
 
-        Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem();
-        // int id = Integer.parseInt(listViewProds.getId());
+        /*int id = Integer.parseInt(listViewProds.getId());
+        ItemType type = selectedProduct.getType();*/
 
-        int numProduced = Integer.parseInt(comboBoxQty.getValue());
+        ProductionRecord pr = new ProductionRecord(selectedProduct,numProduced); //using the appropriate constructor: inserting a product and quantity
         ItemType type = selectedProduct.getType();
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
         String manufacturer = selectedProduct.getManufacturer();
-        String serialNumber = "";
 
-        if (type.equals(ItemType.AUDIO)) {
-            countAU += numProduced;
 
-            for (int productionRunProduct = 0; productionRunProduct < countAU; productionRunProduct++) {//
-                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
 
-                productionRecordLog.appendText(pr.toString() + "\n");
-            }
 
-        } else if (type.equals(ItemType.VISUAL)) {
-            countVI += numProduced;
-                for (int productionRunProduct = 0; productionRunProduct < countVI; productionRunProduct++) {//
-                    ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
 
-                    productionRecordLog.appendText(pr.toString() + "\n");
 
-                }
+        productionRun.add(pr);                                                  //creating an arraylist.
 
-        } else if (type.equals(ItemType.AUDIO_MOBILE)) {
-            countAM += numProduced;
-            for (int productionRunProduct = 0; productionRunProduct < countAM; productionRunProduct++) {//
-                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
-
-                productionRecordLog.appendText(pr.toString() + "\n");
-            }
-
-        } else{
-            countVM+= numProduced;
-            for (int productionRunProduct = 0; productionRunProduct < countVM; productionRunProduct++) {//
-                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
-
-                productionRecordLog.appendText(pr.toString() + "\n");
-            }
-        }
-/*        for (int productionRunProduct = 0; productionRunProduct < numProduced; productionRunProduct++) {//
-
-            ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
-
-            System.out.println(pr.toString());
-
+        addToProductionDB(pr);
+        /*try {
+            addToProductionDB(pr);
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }*/
+
+
     }
 
 
+   // INSERT INTO PRODUCTIONRECORD(PRODUCTION_NUM,PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES(1,1,'AppAU00000', CURRENT_TIMESTAMP() )
+public void addToProductionDB(ProductionRecord pr) throws SQLException {
+        conn = connectToDB();
+        stmt = conn.createStatement();
+        String sqlOut = pr.toString();
+        System.out.println("logging production record to database");
+        System.out.println(sqlOut);
 
 
-    public void setupProductionLog() throws SQLException {
+    stmt.close();
+    conn.close();
+/*    String sqlOut = pr.toString();
+    System.out.println(sqlOut);*/
+}
+
+    /**
+     * Create ProductionRecord objects from the records in the ProductionRecord database table.
+     *gets the info from the PRODUCTION RECORD database. displays it onto the log text area
+     * I combined the loadProductionLog and showProduction  methods into one
+     */
+    public void loadProductionLog() throws SQLException {
         conn = connectToDB();
         stmt = conn.createStatement();
 
-        tableViewProducts.setItems(productLine);
-        TableView tableViewProducts = new TableView();
-        String sqlOut = "SELECT * FROM PRODUCT";
+        String sqlOut = "SELECT * FROM PRODUCTIONRECORD";
         //PreparedStatement stmt = conn.prepareStatement(sqlOut);
         System.out.println(sqlOut);
         ResultSet rs = stmt.executeQuery(sqlOut);
 
         while(rs.next()){
-
+            int id = rs.getInt(1);
+            int productionNum = rs.getInt(2);
+            String serialNum = rs.getString(3);
+            Date date = rs.getDate(4);
+            ProductionRecord pr = new ProductionRecord(id ,productionNum,serialNum,date);
+            productionRun.add(pr);
+            productionRecordLog.appendText(pr.toString());
         }
         listViewProds.setItems(productLine);
-/*        VBox vbox = new VBox(tableViewProducts);
-        Scene scene = new Scene(vbox);*/
         rs.close();
 
         stmt.close();
@@ -181,7 +178,7 @@ public class Controller {
 
 
     /**
-     * Gets list of products in database. puts them into the tableview*
+     * Gets list of products in database. puts them into the tableview
      *
      */
     private void setupProductLineTable() throws SQLException {
@@ -220,7 +217,7 @@ public class Controller {
                 tempType = ItemType.VISUAL_MOBILE;
 
             }
-                //System.out.println(id+name+ manufacturer+type);
+            //System.out.println(id+name+ manufacturer+type);
             Product dbProduct = new Widget(id, name, manufacturer, tempType);// create widget object from database
             //System.out.println(dbProduct.getId());
             //System.out.println(dbProduct.getManufacturer());
@@ -250,7 +247,7 @@ public class Controller {
      * it should take what's in the text fields and put it into the db table
      * it should also call the function to output that info into the tableview
      */
-        public void updateProductsDB() {
+    public void updateProductsDB() {
 
         try {
             // STEP 1: Register JDBC driver
@@ -286,8 +283,8 @@ public class Controller {
             System.out.println(rs.getString(2));
             System.out.println(rs.getString(3));
 
-           //calls function that updates the table.
-           setupProductLineTable();
+            //calls function that updates the table.
+            setupProductLineTable();
 
             // STEP 4: Clean-up environment
 
@@ -299,7 +296,7 @@ public class Controller {
         } catch (SQLException e) {
             taOutput.appendText(e.toString());
         }
-        }
+    }
 
 
     /**
@@ -317,6 +314,71 @@ public class Controller {
         }
         return conn;
     }
+
+
+
+
+/*
+    public void recordProduction(ActionEvent event) {
+
+        // updateProdRecordDB();
+        // outputProdLogTxt();\
+
+        Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem();
+        // int id = Integer.parseInt(listViewProds.getId());
+
+        int numProduced = Integer.parseInt(comboBoxQty.getValue());
+        ItemType type = selectedProduct.getType();
+        Date date = new Date();
+        Timestamp time = new Timestamp(date.getTime());
+        String manufacturer = selectedProduct.getManufacturer();
+        String serialNumber = "";
+
+        if (type.equals(ItemType.AUDIO)) {
+            countAU += numProduced;
+
+            for (int productionRunProduct = 0; productionRunProduct < countAU; productionRunProduct++) {//
+                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                productionRecordLog.appendText(pr.toString() + "\n");
+            }
+
+        } else if (type.equals(ItemType.VISUAL)) {
+            countVI += numProduced;
+            for (int productionRunProduct = 0; productionRunProduct < countVI; productionRunProduct++) {//
+                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                productionRecordLog.appendText(pr.toString() + "\n");
+
+            }
+
+        } else if (type.equals(ItemType.AUDIO_MOBILE)) {
+            countAM += numProduced;
+            for (int productionRunProduct = 0; productionRunProduct < countAM; productionRunProduct++) {//
+                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                productionRecordLog.appendText(pr.toString() + "\n");
+            }
+
+        } else{
+            countVM+= numProduced;
+            for (int productionRunProduct = 0; productionRunProduct < countVM; productionRunProduct++) {//
+                ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+                productionRecordLog.appendText(pr.toString() + "\n");
+            }
+        }
+*/
+/*        for (int productionRunProduct = 0; productionRunProduct < numProduced; productionRunProduct++) {//
+
+            ProductionRecord pr = new ProductionRecord(selectedProduct, productionRunProduct);
+
+            System.out.println(pr.toString());
+
+        }*//*
+
+    }
+*/
 
 }
 
