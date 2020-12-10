@@ -7,6 +7,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**contains an initialize method and event handlers for the action events
@@ -47,9 +48,9 @@ public class Controller {
     Connection conn = null;
     Statement stmt = null;
     static final ObservableList<Product> productLine = FXCollections.observableArrayList();
-    static final ObservableList<ProductionRecord> productionRun = FXCollections.observableArrayList();
+   // static final ObservableList<ProductionRecord> productionRun = FXCollections.observableArrayList();
     //static final ObservableList<ProductionRecord> productRecList = FXCollections.observableArrayList();
-
+    ArrayList<ProductionRecord> productionRun = new ArrayList<>();
 
     private int countAU = 0 ;
     private int countVI = 0;
@@ -96,13 +97,13 @@ public class Controller {
      *Get the selected product from the Product Line ListView and the quantity from the
      *comboBox.
      * Create an ArrayList of ProductionRecord objects named productionRun. *****************
-     *  Send the productionRun to an addToProductionDB method.
+     *  Send the productionRun arraylist to an addToProductionDB method.
      */
     public void recordProduction(ActionEvent event) throws SQLException {
-        Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem(); //selected product
-        int numProduced = Integer.parseInt(comboBoxQty.getValue());                     //quantity of product
+        Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem(); //getting selected product from the listview
+        int numProduced = Integer.parseInt(comboBoxQty.getValue());                     //getting quantity of product from comboBox
 
-
+        //Create an ArrayList of ProductionRecord objects named productionRun. *****************
         /*int id = Integer.parseInt(listViewProds.getId());
         ItemType type = selectedProduct.getType();*/
 
@@ -116,8 +117,7 @@ public class Controller {
 
 
 
-
-        productionRun.add(pr);                                                  //creating an arraylist.
+        productionRun.add(pr);                                                  //adding productionRecord objects to productionRun arraylist
 
         addToProductionDB(pr);
         /*try {
@@ -126,15 +126,14 @@ public class Controller {
             throwable.printStackTrace();
         }*/
 
-
     }
 
    // INSERT INTO PRODUCTIONRECORD(PRODUCTION_NUM,PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES(1,1,'AppAU00000', CURRENT_TIMESTAMP() )
 public void addToProductionDB(ProductionRecord pr) throws SQLException {
         conn = connectToDB();
         stmt = conn.createStatement();
-    //Date date = new Date();
-        String sqlIn = "INSERT INTO PRODUCTIONRECORD(PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES("+  pr.getProductID()+ "," + pr.getSerialNum() + "," + "CURRENT_TIMESTAMP()" + ")";
+        ArrayList<ProductionRecord> productionRun = new ArrayList<>();
+        String sqlIn = "INSERT INTO PRODUCTIONRECORD(PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES("+  pr.getProductID()+ ",'" + pr.getSerialNum() + "'," + "CURRENT_TIMESTAMP()" + ")";
         System.out.println("logging production record to database");
         System.out.println(sqlIn);
         //PreparedStatement ps = conn.prepareStatement(sqlIn);
@@ -225,17 +224,12 @@ public void addToProductionDB(ProductionRecord pr) throws SQLException {
             }
             //System.out.println(id+name+ manufacturer+type);
             Product dbProduct = new Widget(id, name, manufacturer, tempType);// create widget object from database
-            //System.out.println(dbProduct.getId());
-            //System.out.println(dbProduct.getManufacturer());
-
             productLine.add(dbProduct);//save widget/product objects to observable list
             productLine.addAll();
             columnID.setCellValueFactory(new PropertyValueFactory("id"));
             columnName.setCellValueFactory(new PropertyValueFactory("name"));
             columnManufacturer.setCellValueFactory(new PropertyValueFactory("manufacturer"));
             columnType.setCellValueFactory(new PropertyValueFactory("type"));
-
-            //ListView listView = new ListView();
         }
         listViewProds.setItems(productLine);
 /*        VBox vbox = new VBox(tableViewProducts);
