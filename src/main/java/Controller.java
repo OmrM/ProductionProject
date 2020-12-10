@@ -129,16 +129,22 @@ public class Controller {
 
     }
 
-
    // INSERT INTO PRODUCTIONRECORD(PRODUCTION_NUM,PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES(1,1,'AppAU00000', CURRENT_TIMESTAMP() )
 public void addToProductionDB(ProductionRecord pr) throws SQLException {
         conn = connectToDB();
         stmt = conn.createStatement();
-        String sqlOut = pr.toString();
+    //Date date = new Date();
+        String sqlIn = "INSERT INTO PRODUCTIONRECORD(PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES("+  pr.getProductID()+ "," + pr.getSerialNum() + "," + "CURRENT_TIMESTAMP()" + ")";
         System.out.println("logging production record to database");
-        System.out.println(sqlOut);
+        System.out.println(sqlIn);
+        //PreparedStatement ps = conn.prepareStatement(sqlIn);
 
 
+        stmt.executeUpdate(sqlIn);
+        productionRun.add(pr);
+
+
+        productionRecordLog.appendText(pr.toString());
     stmt.close();
     conn.close();
 /*    String sqlOut = pr.toString();
