@@ -55,15 +55,15 @@ public class ProductionRecord {
    * database. This constructor needs parameters for all fields.
    *
    * @param productionNumber production number
-   * @param productID        product id
+   * @param productId        product id
    * @param serialNumber     serial num
    * @param dateProduced     date
    */
-  public ProductionRecord(int productionNumber, int productID, String serialNumber,
+  public ProductionRecord(int productionNumber, int productId, String serialNumber,
       Date dateProduced) {
 
     this.productionNumber = productionNumber;
-    this.productId = productID;
+    this.productId = productId;
     this.serialNumber = serialNumber;
     // dateProduced = new Date();
     this.dateProduced = dateProduced;
@@ -87,7 +87,7 @@ public class ProductionRecord {
 
 
   /**
-   * generates a serial number
+   * generates a serial number.
    *
    * @param manufacturer manufacturer
    * @param type         type
@@ -111,7 +111,7 @@ public class ProductionRecord {
 
 
   /**
-   * to string method to display the production number,id, serial number, and date
+   * to string method to display the production number,id, serial number, and date.
    */
   public String toString() {
     return "Prod. Num: " + productionNumber + " Product ID: " + productId + " Serial Num: "
