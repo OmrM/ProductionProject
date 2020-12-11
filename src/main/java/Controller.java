@@ -2,15 +2,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.InputMismatchException;
 
 /**contains an initialize method and event handlers for the action events
  * @author Omar Muniz
@@ -40,6 +38,14 @@ public class Controller {
     private ComboBox<String> comboBoxQty;
     @FXML
     private TextArea productionRecordLog;
+    @FXML
+    private TextField employeeName;
+    @FXML
+    private TextField employeePassword;
+    @FXML
+    private TextArea employeeDetails;
+    @FXML
+    private Button employeeButton;
 
     final String JDBC_DRIVER = "org.h2.Driver";
     final String DB_URL = "jdbc:h2:./res/Production";
@@ -77,98 +83,95 @@ public class Controller {
      */
     public void addProduct(ActionEvent event) {
         System.out.println("Add Product");
-        tableViewProducts.getItems().clear(); //clears the tableview. otherwise, it would just append a copy of what's in the db
-        updateProductsDB();
+        tableViewProducts.getItems().clear(); //clears the tableview. otherwise, it would just append a copy of what's in the database
+        recordProductsDB();
     }
 
+    /**
+     * creates a connection to the database
+     *
+     * @return conn connection
+     */
+    public Connection connectToDB() {
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }
 
     /**
-     * Record Production Button
-     * records to the production log and outputs it to the text area
-     * <p>
-     * Get the selected product from the Product Line ListView and the quantity from the
-     * comboBox.
-     * Create an ArrayList of ProductionRecord objects named productionRun. *****************
-     * Send the productionRun arraylist to an addToProductionDB method.
+     * This method will be called when you press the add product button.
+     * it should take what's in the text fields and put it into the db table
+     * it should also call the function to output that info into the tableview
      */
-    public void recordProduction(ActionEvent event) throws SQLException {
+    public void recordProductsDB() {
 
         try {
-            productionRecordLog.clear();                                                    //need to clear text area before outputting more text onto it
-            try{
-                Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem();  //getting selected product from the listview
-
-                int numProduced = Integer.parseInt(comboBoxQty.getValue());                     //getting quantity of product from comboBox
-
-                System.out.println("number of items produced: " + numProduced);
-                ProductionRecord productionRecordObj = new ProductionRecord(selectedProduct, numProduced); //using the appropriate constructor, which takes a product and quantity
-
-                for (int numCount = 0; numCount < numProduced; numCount++) {
-                    productionRun.add(productionRecordObj);                                  //adding productionRecord objects to productionRun arraylist
-                    addToProductionDB(productionRecordObj);                                 //Send the productionRun arraylist to an addToProductionDB method.
-                }
-                loadProductionLog();                                                        //call loadProductionLog
-
-            }catch (NullPointerException NPE){
-                System.out.println("You Must First Select a Product, Then a Quantity From The Dropdown Box");
+            // STEP 1: Register JDBC driver
+            //STEP 2: Open a connection
+            conn = connectToDB();
+            stmt = conn.createStatement();
+            //STEP 3: Execute a query
+            //use this syntax to pull info from text fields: String varName = fxIdName.getText();
+            String productName = name.getText();
+            String productManufacturer = manufacturer.getText();
+            String productType = productTypeBox.getValue();
+            if(productName.isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "error");
+                alert.setTitle("Error");
+                alert.setHeaderText("Missing Product Name");
+                alert.setContentText("Enter a Product Name");
+                alert.showAndWait();
             }
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            if(productManufacturer.isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "error");
+                alert.setTitle("Error");
+                alert.setHeaderText("Missing Product Manufacturer");
+                alert.setContentText("Enter a Product Manufacturer");
+                alert.showAndWait();
+            }
+            else {
+                //Other way to set up sql statement:
+                // String sqlIn = "INSERT INTO PRODUCT(ID, NAME, MANUFACTURER, TYPE) VALUES((SELECT MAX(ID) FROM PRODUCT) +1 " + ", '" + productName + "', '" + productManufacturer + "', '" + productType + "')";
+                final String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES(?,?,?)";
+                PreparedStatement ps = conn.prepareStatement(sqlIn); //creating object named ps from class PreparedStatement
+                ps.setString(1, productName);
+                ps.setString(2, productManufacturer);
+                ps.setString(3, productType);
+                System.out.println(sqlIn);                          //console output to monitor the syntax of the sql statement
+                ps.executeUpdate();
+
+
+                //prints out the newest record into the console:
+                String sqlOut = "SELECT ID, NAME, MANUFACTURER, TYPE FROM PRODUCT WHERE ID= (SELECT MAX(ID) FROM PRODUCT)";
+
+                ResultSet rs = stmt.executeQuery(sqlOut);           //executeQuery grabs info from the db
+                rs.next();
+                System.out.println(sqlOut);
+                System.out.println(rs.getString(1));
+                System.out.println(rs.getString(2));
+                System.out.println(rs.getString(3));
+
+                //calls function that updates the table.
+                setupProductLineTable();
+
+                // STEP 4: Clean-up environment
+                ps.close();
+                rs.close();
+                stmt.close();
+                conn.close();
+            }
+        } catch (SQLException e) {
+            taOutput.appendText(e.toString());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Error");
+            alert.setTitle("Error");
+            alert.setHeaderText("Database Error");
+            alert.setContentText("Cannot connect to database, Try again later");
+            alert.showAndWait();
         }
-
-    }
-
-
-    /**
-     * Loop through the productionRun, inserting productionRecord object information into the ProductionRecord database table
-     *
-     * @param productionRecordObj productionRecord object passed from recordProduction()
-     * @throws SQLException exception
-     */
-    public void addToProductionDB(ProductionRecord productionRecordObj) throws SQLException {
-        conn = connectToDB();
-        stmt = conn.createStatement();
-
-        String sqlIn = "INSERT INTO PRODUCTIONRECORD(PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES(" + productionRecordObj.getProductID() + ",'" + productionRecordObj.getSerialNum() + "'," + "CURRENT_TIMESTAMP()" + ")";
-        System.out.println("logging production record to database");
-        System.out.println(sqlIn);
-        stmt.executeUpdate(sqlIn);
-
-        productionRun.add(productionRecordObj);
-
-        stmt.close();
-        conn.close();
-    }
-
-    /**
-     * Create ProductionRecord objects from the records in the ProductionRecord database table.
-     * gets the info from the PRODUCTION RECORD database. displays it onto the log text area
-     * I combined the loadProductionLog and showProduction  methods into one
-     */
-    public void loadProductionLog() throws SQLException {
-        conn = connectToDB();
-        stmt = conn.createStatement();
-
-        String sqlOut = "SELECT * FROM PRODUCTIONRECORD";
-        //PreparedStatement stmt = conn.prepareStatement(sqlOut);
-        System.out.println(sqlOut);
-        ResultSet rs = stmt.executeQuery(sqlOut);
-
-        while (rs.next()) {
-            int id = rs.getInt(1);
-            int productionNum = rs.getRow();
-            String serialNum = rs.getString(3);
-            Date date = rs.getDate(4);
-            ProductionRecord pr = new ProductionRecord(id, productionNum, serialNum, date);
-            productionRun.add(pr);                              //adds production record objects to the arraylist named productionRun
-            productionRecordLog.appendText(pr.toString());      //displays the production log onto the text area in the gui
-        }
-        listViewProds.setItems(productLine);
-        rs.close();
-
-        stmt.close();
-        conn.close();
-
     }
 
     /**
@@ -225,73 +228,115 @@ public class Controller {
     }
 
     /**
-     * This method will be called when you press the add product button.
-     * it should take what's in the text fields and put it into the db table
-     * it should also call the function to output that info into the tableview
+     * Record Production Button
+     * records to the production log and outputs it to the text area
+     * <p>
+     * Get the selected product from the Product Line ListView and the quantity from the
+     * comboBox.
+     * Create an ArrayList of ProductionRecord objects named productionRun. *****************
+     * Send the productionRun arraylist to an addToProductionDB method.
      */
-    public void updateProductsDB() {
-
+    public void recordProduction(ActionEvent event) throws SQLException {
         try {
-            // STEP 1: Register JDBC driver
-            //STEP 2: Open a connection
-            conn = connectToDB();
-            stmt = conn.createStatement();
-            //STEP 3: Execute a query
-            //use this syntax to pull info from text fields: String varName = fxIdName.getText();
-            String productName = name.getText();
-            String productManufacturer = manufacturer.getText();
-            String productType = productTypeBox.getValue();
+            try{
+            productionRecordLog.clear();                                                    //need to clear text area before outputting more text onto it
+            try {
+                Product selectedProduct = listViewProds.getSelectionModel().getSelectedItem();  //getting selected product from the listview
 
-            //Other way to set up sql statement:
-            // String sqlIn = "INSERT INTO PRODUCT(ID, NAME, MANUFACTURER, TYPE) VALUES((SELECT MAX(ID) FROM PRODUCT) +1 " + ", '" + productName + "', '" + productManufacturer + "', '" + productType + "')";
-            final String sqlIn = "INSERT INTO PRODUCT(NAME, MANUFACTURER, TYPE) VALUES(?,?,?)";
-            PreparedStatement ps = conn.prepareStatement(sqlIn); //creating object named ps from class PreparedStatement
-            ps.setString(1, productName);
-            ps.setString(2, productManufacturer);
-            ps.setString(3, productType);
-            System.out.println(sqlIn);                          //console output to monitor the syntax of the sql statement
-            ps.executeUpdate();
+                int numProduced = Integer.parseInt(comboBoxQty.getValue());                     //getting quantity of product from comboBox
 
+                System.out.println("number of items produced: " + numProduced);
+                ProductionRecord productionRecordObj = new ProductionRecord(selectedProduct, numProduced); //using the appropriate constructor, which takes a product and quantity
 
-            //prints out the newest record into the console:
-            String sqlOut = "SELECT ID, NAME, MANUFACTURER, TYPE FROM PRODUCT WHERE ID= (SELECT MAX(ID) FROM PRODUCT)";
-
-            ResultSet rs = stmt.executeQuery(sqlOut);           //executeQuery grabs info from the db
-            rs.next();
-            System.out.println(sqlOut);
-            System.out.println(rs.getString(1));
-            System.out.println(rs.getString(2));
-            System.out.println(rs.getString(3));
-
-            //calls function that updates the table.
-            setupProductLineTable();
-
-            // STEP 4: Clean-up environment
-
-            ps.close();
-            rs.close();
-
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            taOutput.appendText(e.toString());
+                for (int numCount = 0; numCount < numProduced; numCount++) {
+                    productionRun.add(productionRecordObj);                                  //adding productionRecord objects to productionRun arraylist
+                    addToProductionDB(productionRecordObj);                                 //Send the productionRun arraylist to an addToProductionDB method.
+                }
+                loadProductionLog();                                                        //call loadProductionLog
+                }catch(NumberFormatException NFE){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Error");
+                alert.setTitle("Error");
+                alert.setHeaderText("Number Format Exception");
+                alert.setContentText("Enter a valid Amount");
+                alert.showAndWait();
+                }
+            }catch (NullPointerException NPE){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Error");
+                alert.setTitle("Error");
+                alert.setHeaderText("No Product Selected");
+                alert.setContentText("You Must First Select a Product, Then a Quantity From The Dropdown Box");
+                alert.showAndWait();
+            }
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
+
+    }
+
+
+    /**
+     * Loop through the productionRun, inserting productionRecord object information into the ProductionRecord database table
+     *
+     * @param productionRecordObj productionRecord object passed from recordProduction()
+     * @throws SQLException exception
+     */
+    public void addToProductionDB(ProductionRecord productionRecordObj) throws SQLException {
+        conn = connectToDB();
+        stmt = conn.createStatement();
+
+        String sqlIn = "INSERT INTO PRODUCTIONRECORD(PRODUCT_ID,SERIAL_NUM,DATE_PRODUCED) VALUES(" + productionRecordObj.getProductID() + ",'" + productionRecordObj.getSerialNum() + "'," + "CURRENT_TIMESTAMP()" + ")";
+        System.out.println("logging production record to database");
+        System.out.println(sqlIn);
+        stmt.executeUpdate(sqlIn);
+
+        productionRun.add(productionRecordObj);
+
+        stmt.close();
+        conn.close();
     }
 
     /**
-     * creates a connection to the database
-     *
-     * @return conn connection
+     * Create ProductionRecord objects from the records in the ProductionRecord database table.
+     * gets the info from the PRODUCTION RECORD database. displays it onto the log text area
+     * I combined the loadProductionLog and showProduction  methods into one
      */
-    public Connection connectToDB() {
+    public void loadProductionLog() throws SQLException {
         try {
-            Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            conn = connectToDB();
+            stmt = conn.createStatement();
+
+            String sqlOut = "SELECT * FROM PRODUCTIONRECORD";
+            //PreparedStatement stmt = conn.prepareStatement(sqlOut);
+            System.out.println(sqlOut);
+            ResultSet rs = stmt.executeQuery(sqlOut);
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                int productionNum = rs.getRow();
+                String serialNum = rs.getString(3);
+                Date date = rs.getDate(4);
+                ProductionRecord pr = new ProductionRecord(id, productionNum, serialNum, date);
+                productionRun.add(pr);                              //adds production record objects to the arraylist named productionRun
+                productionRecordLog.appendText(pr.toString());      //displays the production log onto the text area in the gui
+            }
+            listViewProds.setItems(productLine);
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch (SQLException throwable){
+            throwable.printStackTrace();
         }
-        return conn;
     }
+
+    public void setEmployeeDetails(ActionEvent event){
+        String empName = employeeName.getText();
+        String empPassword = employeePassword.getText();
+        Employee employee = new Employee(empName, empPassword);
+        employeeDetails.clear();
+        employeeDetails.appendText(employee.toString());
+    }
+
+
 }
 
 

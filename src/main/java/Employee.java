@@ -11,7 +11,7 @@ public class Employee {
 
 
     /******************************************
-     *  he constructor will call checkName to check if the name contains a space.
+     *  the constructor will call checkName to check if the name contains a space.
      *  If it does, it will call setUsername and setEmail, passing the name in to both
      *  If the password is valid (containing a lowercase letter, uppercase letter, and a special character)
      *     the password field gets set to the supplied password.
@@ -102,7 +102,26 @@ public class Employee {
 
     }
 
+    /**
+     * reverses a string. used for password
+     * @param id
+     * @return  reversed String
+     */
+    public String reverseString(String id) {
+        if (id.length() == 0 ) {
+            return id;
+        }
+        else {
+            return reverseString(id.substring(1)) + id.charAt(0);
+        }
+    }
+
+    /**
+     * toString method for employee details
+     * @return Formatted employee details
+     */
     public String toString(){
+        password = reverseString(password);
         return "Employee Details" + "\nName : " + name  + "\nUsername : " + userName + "\nEmail : " + email + "\nInitial Password : " + password;
     }
 
