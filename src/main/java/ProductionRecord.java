@@ -103,8 +103,18 @@ public class ProductionRecord {
      */
     public String createSerialNumber(String manufacturer, ItemType type, int itemCount) {
         //String serialNumber = manufacturer.substring(0, 3) + type.getItemType()+ "0000"+ itemCount;
-        return manufacturer.substring(0, 3) + type.getItemType()+ String.format("%05d",itemCount);
+       // return manufacturer.substring(0, 3) + type.getItemType()+ String.format("%05d",itemCount);
+        int manufactureLength = manufacturer.length();
 
+        if(manufactureLength<3){
+            manufacturer = manufacturer.substring(0,2).toUpperCase()+"0";
+        }
+        else{
+            manufacturer = manufacturer.substring(0,3).toUpperCase();
+        }
+
+        String serialNum =  manufacturer + type.getItemType()+ String.format("%05d",itemCount); //% + desiredString + numOfDigits + d for ints??
+        return serialNum;
     }
 
 
