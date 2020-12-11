@@ -7,15 +7,15 @@
 ![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/ProductionProjectDemo.gif?token=AQVSLYUNQDEA7VQDFUYVHMK73TOMC)
 
 ## Diagrams
-![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/docs/Diagram.png?token=AQVSLYWYXQXK3SZTO3YFUFC73TSQG)
+![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/docs/Diagram.png?token=AQVSLYRASYBODDJDUIWCYZK73URQC)
 
 ## Acknowledgments
 Professor Scott Vanselow
 
-for information on javaFX alerts:
+For information on javaFX alerts:
 https://www.geeksforgeeks.org/javafx-alert-with-examples/
 
-for information on arraylists:
+For information on arraylists:
 https://www.w3schools.com/java/java_arraylist.asp
 
 For Information on String formatting:
