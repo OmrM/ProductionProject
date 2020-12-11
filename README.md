@@ -2,7 +2,7 @@
  Production Line Tracker with a GUI and database. This is a project for my Object Oriented Programming course taught by Professor Vanselow. 
 
 ## Project Demo
-
+![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/ProductionProjectDemo.gif?token=AQVSLYUNQDEA7VQDFUYVHMK73TOMC)
 
 ## License
 
