@@ -1,8 +1,8 @@
 # Production Project
  Production Line Tracker with a GUI and database. This is a project for my Object Oriented Programming course COP3003.
  
-#JavaDoc
-![Alt Text](https://github.com/OmrM/ProductionProject/blob/master/docs/index.html)
+# JavaDoc
+![javadoc](https://github.com/OmrM/ProductionProject/blob/master/docs/index.html)
 ## Project Demo
 ![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/ProductionProjectDemo.gif?token=AQVSLYUNQDEA7VQDFUYVHMK73TOMC)
 
