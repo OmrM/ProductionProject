@@ -9,7 +9,7 @@ public class ProductionRecord {
 
   /**
    * ProductionRecord class can create a timestamp, serial number allows us to choose the item
-   * count
+   * count.
    *
    * @author Omar Muniz
    */
@@ -48,19 +48,6 @@ public class ProductionRecord {
 
   public int getProductId() {
     return productId;
-  }
-
-  /**
-   * Make one constructor that just has a parameter for the productID. This will be the constructor
-   * called when the user records production from the user interface.
-   *
-   * @param productID product id
-   */
-  public ProductionRecord(int productID) {
-    productionNumber = 0;
-    serialNumber = "0";
-    dateProduced = new Date();
-    //return productionNumber;
   }
 
   /**
