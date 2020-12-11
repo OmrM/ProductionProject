@@ -10,13 +10,14 @@ public class Employee {
   String email;
 
 
-  /******************************************
-   *  the constructor will call checkName to check if the name contains a space.
-   *  If it does, it will call setUsername and setEmail, passing the name in to both
-   *  If the password is valid (containing a lowercase letter,
-   *  uppercase letter, and a special character)
-   *     the password field gets set to the supplied password.
-   *     If the password is invalid, the password field gets set to "pw".
+  /**
+   * the constructor will call checkName to check if the name contains a space.
+   * If it does, it will call setUsername and setEmail, passing the name in to both
+   * If the password is valid (containing a lowercase letter,
+   * uppercase letter, and a special character)
+   * the password field gets set to the supplied password.
+   * If the password is invalid, the password field gets set to "pw".
+
    * @param name name parameter
    * @param password password
    */
@@ -35,15 +36,17 @@ public class Employee {
     }
   }
 
-  /**********************************************************
-   * method checks if the name contains a space.
+  /**checks if the  name has a space
+   * and then puts a default if it doesn't.
+
    * @param name name variable
-   * @return boolean
+   * @return boolean method checks if the name contains a space.
    */
   private boolean checkName(String name) {
 
     if (name.contains(" ")) {
-      //if name contains a space (a valid name contains a space between the first and last name:
+      //if name contains a space (a valid name
+      // contains a space between the first and last name:
       setUsername();               //then set a username with that info
       setEmail();
       return true;

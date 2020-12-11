@@ -261,7 +261,6 @@ public class Controller {
 
   /**
    * Record Production Button records to the production log and outputs it to the text area
-   * <p>
    * Get the selected product from the Product Line ListView and the quantity from the comboBox.
    * Create an ArrayList of ProductionRecord objects named productionRun. ***************** Send the
    * productionRun arraylist to an addToProductionDB method.
