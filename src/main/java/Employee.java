@@ -28,9 +28,6 @@ public class Employee {
         checkName(name);
         isValidPassword();
 
-
-
-
         if(!isValidPassword()){
             this.password = "pw";
         }
@@ -38,8 +35,6 @@ public class Employee {
             this.password = password;
         }
     }
-
-
 
     /**********************************************************
      * method checks if the name contains a space.
@@ -62,7 +57,6 @@ public class Employee {
     }
     // !nameStr.matches("//S+")
 
-
     /**********************************************************
      * setUsername will set the username field to the first initial of the first name
      * and then the last name, all lowercase.
@@ -76,9 +70,6 @@ public class Employee {
 
     }
 
-
-
-
     /**********************************************************
      * setEmail will set the email field to the first name,
      * then a period, then the last name (all lowercase) followed by @oracleacademy.Test
@@ -89,9 +80,6 @@ public class Employee {
         this.email = firstName + "." + lastName + "@oracleacademy.Test";
 
     }
-
-
-
 
     /**********************************************************
      * checks if it's a valid password
@@ -113,8 +101,6 @@ public class Employee {
         }
 
     }
-
-
 
     public String toString(){
         return "Employee Details" + "\nName : " + name  + "\nUsername : " + userName + "\nEmail : " + email + "\nInitial Password : " + password;

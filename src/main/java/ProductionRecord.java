@@ -113,7 +113,7 @@ public class ProductionRecord {
             manufacturer = manufacturer.substring(0,3).toUpperCase();
         }
 
-        String serialNum =  manufacturer + type.getItemType()+ String.format("%05d",itemCount); //% + desiredString + numOfDigits + d for ints??
+        String serialNum =  manufacturer + type.getItemType()+ String.format("%05d",itemCount); //% + desiredString + numOfDigits + d for ints
         return serialNum;
     }
 
