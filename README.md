@@ -12,10 +12,10 @@
 ## Acknowledgments
 Professor Scott Vanselow
 
-for information on javaFX alerts:
+For information on javaFX alerts:
 https://www.geeksforgeeks.org/javafx-alert-with-examples/
 
-for information on arraylists:
+For information on arraylists:
 https://www.w3schools.com/java/java_arraylist.asp
 
 For Information on String formatting:
