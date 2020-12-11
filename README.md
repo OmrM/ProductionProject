@@ -6,6 +6,8 @@
 ## Project Demo
 ![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/ProductionProjectDemo.gif?token=AQVSLYUNQDEA7VQDFUYVHMK73TOMC)
 
+## Diagrams
+![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/docs/Diagram.png?token=AQVSLYWYXQXK3SZTO3YFUFC73TSQG)
 ## License
 
 This project is licensed under the MIT License.
