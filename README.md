@@ -3,7 +3,7 @@
  
 
 
-![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/ProductionProjectDemo.gif?token=AQVSLYUNQDEA7VQDFUYVHMK73TOMC)
+![Alt Text](https://github.com/OmrM/ProductionProject/blob/master/ProductionProjectDemo.gif)
 
 ## Diagrams
 ![Alt Text](https://raw.githubusercontent.com/OmrM/ProductionProject/master/docs/Diagram.png?token=AQVSLYRASYBODDJDUIWCYZK73URQC)
